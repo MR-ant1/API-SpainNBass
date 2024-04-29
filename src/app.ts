@@ -1,6 +1,7 @@
 
 import express, { Application } from 'express';
 import cors from 'cors'
+import { deleteUser, getUser, updateUser } from './controllers/userController';
 
 export const app: Application = express();
 
@@ -15,3 +16,8 @@ app.get('/healthy', (req, res) => {
         }
     );
 })
+
+//user routes
+app.get('/user', getUser)
+app.put('/user/:id', updateUser)
+app.delete('/user/:id', deleteUser)
