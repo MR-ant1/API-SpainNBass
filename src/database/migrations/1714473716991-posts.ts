@@ -31,7 +31,7 @@ export class Posts1714473716991 implements MigrationInterface {
                         isNullable: true
                     },
                     {
-                        name: "user_id",
+                        name: "owner_id",
                         type: "int",
                         isNullable: true
                     },
@@ -49,7 +49,7 @@ export class Posts1714473716991 implements MigrationInterface {
                 ],
                 foreignKeys: [
                     {
-                        columnNames: ["user_id"],
+                        columnNames: ["owner_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
                         onUpdate: "CASCADE"

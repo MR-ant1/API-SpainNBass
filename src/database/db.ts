@@ -3,9 +3,10 @@ import "reflect-metadata";
 import 'dotenv/config';
 import { DataSource } from "typeorm";
 import { Users1714418032255 } from "./migrations//1714418032255-users";
-import { News1714470644500 } from "./migrations/1714470644500-news";
+import { Latests1714470644500 } from "./migrations/1714470644500-latests";
 import { Posts1714473716991 } from "./migrations/1714473716991-posts";
 import { Comments1714474226210 } from "./migrations/1714474226210-comments";
+import { Likes1714484844036 } from "./migrations/1714484844036-likes";
 
 
 
@@ -17,7 +18,7 @@ export const AppDataSource = new DataSource({
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_DATABASE || "test",
     entities: [],
-    migrations: [Users1714418032255, News1714470644500, Posts1714473716991, Comments1714474226210],
+    migrations: [Users1714418032255, Latests1714470644500, Posts1714473716991, Comments1714474226210, Likes1714484844036],
     synchronize: false,
     logging: false,
 })
