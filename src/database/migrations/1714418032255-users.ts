@@ -6,7 +6,7 @@ export class Users1714418032255 implements MigrationInterface {
 
         await queryRunner.createTable(
             new Table({
-                name:'users',
+                name: 'users',
                 columns: [
                     {
                         name: 'id',
@@ -30,8 +30,9 @@ export class Users1714418032255 implements MigrationInterface {
                     {
                         name: "preference",
                         type: "enum",
-                        enum: ["dnbLover", "dj", "producer", "dj/producer"],
+                        enum: ["dnbLover", "DJ", "Producer", "DJ/Producer"],
                         default: "'dnbLover'"
+                        //Incluimos dobles comillas porque typeorm lo exige para incluir el default en la migración
                     },
                     {
                         name: "turntable",
@@ -51,12 +52,26 @@ export class Users1714418032255 implements MigrationInterface {
                         length: "255",
                     },
                     {
-                        name: "is_active",
-                        type: "boolean",
-                        default: true
+                        name: "role",
+                        type: "enum",
+                        enum: ["user", "admin", "super_admin"],
+                        default: "'user'"
+                        //ocurre lo mismo que en el otro enum
                     },
+                    {
+                        name: "created_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP"
+                    },
+                    {
+                        name: "updated_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
+                        onUpdate: "CURRENT_TIMESTAMP"
+                    }
                 ]
-            })
+            }),
+            true
         )
     }
 
