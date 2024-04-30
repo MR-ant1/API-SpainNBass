@@ -2,6 +2,7 @@
 import { BaseEntity, Column, Entity,   OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Latest } from "./Latest"
 import { Post } from "./Post"
+import { Comment } from "./Comment"
 
 
 @Entity('users')
@@ -32,6 +33,8 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Latest, (latest) => latest.user)
     latests!: Latest
+    @OneToMany(() => Comment, (comment) => comment.user)
+    comments!: Latest
     @OneToMany(() => Post, (post) => post.owner)
     posts!: Post
 

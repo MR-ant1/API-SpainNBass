@@ -25,6 +25,11 @@ export class Posts1714473716991 implements MigrationInterface {
                         length: "1000"
                     },
                     {
+                        name: "topic",
+                        type: "enum",
+                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"]
+                    },
+                    {
                         name: "pic_url",
                         type: "varchar",
                         length: "250",

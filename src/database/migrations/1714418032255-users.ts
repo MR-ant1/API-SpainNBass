@@ -23,9 +23,9 @@ export class Users1714418032255 implements MigrationInterface {
                     },
                     {
                         name: "fav_subgenre",
-                        type: "varchar",
-                        length: "40",
-                        isNullable: true
+                        type: "enum",
+                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"],
+                        default: "'Club dnb'"
                     },
                     {
                         name: "preference",

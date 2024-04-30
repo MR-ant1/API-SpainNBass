@@ -1,7 +1,8 @@
 
 
-import { BaseEntity, Column, Entity, JoinColumn, ManyToOne,  PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, ManyToOne,  OneToMany,  PrimaryGeneratedColumn } from "typeorm"
 import { User } from "./User"
+import { Comment } from "./Comment"
 
 
 @Entity('post')
@@ -24,4 +25,7 @@ export class Post extends BaseEntity {
     @ManyToOne(() => User, (owner) => owner.posts)
     @JoinColumn({ name: 'owner_id' })
     owner!: User
+
+    @OneToMany(() => Comment, (comment) => comment.post)
+    comments!: Comment
 }
