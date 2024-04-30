@@ -5,7 +5,7 @@ import { User } from "./User"
 import { Comment } from "./Comment"
 
 
-@Entity('post')
+@Entity('posts')
 export class Post extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
@@ -26,6 +26,6 @@ export class Post extends BaseEntity {
     @JoinColumn({ name: 'owner_id' })
     owner!: User
 
-    @OneToMany(() => Comment, (comment) => comment.post)
+    @OneToMany(() => Comment, (comments) => comments.post)
     comments!: Comment
 }

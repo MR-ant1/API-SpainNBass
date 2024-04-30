@@ -30,15 +30,13 @@ export class Likes1714484844036 implements MigrationInterface {
                         columnNames: ["user_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
-                        onDelete: "CASCADE",
-                        onUpdate: "CASCADE"
+                        onDelete: "CASCADE"
                     },
                     {
                         columnNames: ["post_id"],
                         referencedTableName: "posts",
                         referencedColumnNames: ["id"],
-                        onDelete:"CASCADE",
-                        onUpdate: "CASCADE"
+                        onDelete: "CASCADE"
                     }
                 ]
             }),

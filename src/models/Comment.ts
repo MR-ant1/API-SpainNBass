@@ -6,16 +6,16 @@ import { User } from "./User"
 import { Post } from "./Post"
 
 
-@Entity('comment')
+@Entity('comments')
 export class Comment extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number
 
     @Column({ name: "comment" })
-    description!: string
+    comment!: string
 
     @Column({ name: "url" })
-    topic!: string
+    url!: string
 
     @ManyToOne(() => User, (user) => user.comments)
     @JoinColumn({ name: 'user_id' })
@@ -23,5 +23,5 @@ export class Comment extends BaseEntity {
 
     @ManyToOne(() => Post, (post) => post.comments)
     @JoinColumn({ name: 'post_id' })
-    post!: User
+    post!: Post
 }

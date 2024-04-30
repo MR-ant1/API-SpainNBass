@@ -2,7 +2,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne,  PrimaryGeneratedColumn } from "typeorm"
 import { User } from "./User"
 
-@Entity('latest')
+@Entity('latests')
 export class Latest extends BaseEntity {
     @PrimaryGeneratedColumn()
     id!: number

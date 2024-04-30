@@ -31,11 +31,11 @@ export class User extends BaseEntity {
     @Column({ name: "role", select:false })
     role!: string
 
-    @OneToMany(() => Latest, (latest) => latest.user)
+    @OneToMany(() => Latest, (latests) => latests.user)
     latests!: Latest
-    @OneToMany(() => Comment, (comment) => comment.user)
-    comments!: Latest
-    @OneToMany(() => Post, (post) => post.owner)
+    @OneToMany(() => Comment, (comments) => comments.user)
+    comments!: Comment
+    @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
 
 }

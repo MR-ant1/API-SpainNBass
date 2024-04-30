@@ -6,14 +6,14 @@ import { User } from "../../models/User";
 
 
 const generateFakeUser = () => {
-    const userFaker = new User();
-    userFaker.nickname = faker.person.lastName();
-    userFaker.favSubgenre = "Club";
-    userFaker.preference = "dnbLover";
-    userFaker.turntable = faker.lorem.words();
-    userFaker.email = faker.internet.email();
-    userFaker.password = bcrypt.hashSync("aA123456", 5);
-    return userFaker;
+    const randomUser = new User();
+    randomUser.nickname = faker.person.lastName();
+    randomUser.favSubgenre = "Club dnb";
+    randomUser.preference = "dnbLover";
+    randomUser.turntable = faker.lorem.words();
+    randomUser.email = faker.internet.email();
+    randomUser.password = bcrypt.hashSync("aA123456", 5);
+    return randomUser;
 }
 
 export const userSeedDataBase = async () => {

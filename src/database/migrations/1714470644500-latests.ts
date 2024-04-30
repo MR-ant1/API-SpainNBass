@@ -21,8 +21,8 @@ export class Latests1714470644500 implements MigrationInterface {
                     },
                     {
                         name: "description",
-                        type: "varchar",
-                        length: "250"
+                        type: "text",
+                        length: "1000"
                     },
                     {
                         name: "pic_url",
@@ -51,7 +51,7 @@ export class Latests1714470644500 implements MigrationInterface {
                         columnNames: ["user_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
-                        onUpdate: "CASCADE"
+                        onDelete: "CASCADE"
                     }
                 ]
             }),
