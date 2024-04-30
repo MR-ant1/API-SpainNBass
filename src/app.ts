@@ -1,8 +1,10 @@
 
 import express, { Application } from 'express';
 import cors from 'cors'
-import { deleteUser, getUser, updateUser } from './controllers/userController';
+import { deleteUser, getAllUsers, updateProfile } from './controllers/userController';
 import { login, registerUser } from './controllers/authControllers';
+import { auth } from './middlewares/auth';
+import { isSuperAdmin } from './middlewares/isSuperAdmin';
 
 export const app: Application = express();
 
@@ -19,9 +21,9 @@ app.get('/healthy', (req, res) => {
 })
 
 // user routes
-app.get('/user', getUser)
-app.put('/user/:id', updateUser)
-app.delete('/user/:id', deleteUser)
+app.get('/users', auth, isSuperAdmin, getAllUsers)
+app.put('/users/profile', auth, updateProfile)
+app.delete('/users/:id', deleteUser)
 
 // auth routes
 
