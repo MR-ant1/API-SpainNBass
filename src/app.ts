@@ -2,7 +2,7 @@
 import express, { Application } from 'express';
 import cors from 'cors'
 import { deleteUser, getUser, updateUser } from './controllers/userController';
-import { registerUser } from './controllers/authControllers';
+import { login, registerUser } from './controllers/authControllers';
 
 export const app: Application = express();
 
@@ -25,4 +25,5 @@ app.delete('/user/:id', deleteUser)
 
 // auth routes
 
-app.post('/auth/register', registerUser)
+app.post('/auth/register', registerUser);
+app.post('/auth/login', login);

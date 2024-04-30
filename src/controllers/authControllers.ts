@@ -16,14 +16,14 @@ export const registerUser = async (req: Request, res: Response) => {
         if (nickname.length < 3 || turntable.length < 3) {
             return res.status(400).json({
                 success: false,
-                message: "nickname and turntable must contain at least 3 characters"
+                message: "Debe tener mas de 2 caracteres"
             })
         }
 
         if (password.length < 8 || password.length > 14) {
             return res.status(400).json({
                 success: false,
-                message: "Password must contain between 8 and 14 characters"
+                message: "Contraseña debe tener entre 8 y 14 caracteres"
             })
         }
 
@@ -33,7 +33,7 @@ export const registerUser = async (req: Request, res: Response) => {
             return res.status(400).json(
                 {
                     success: false,
-                    message: "Email format invalid"
+                    message: "Formato de email incorrecto"
                 }
             )
         }
@@ -50,15 +50,96 @@ export const registerUser = async (req: Request, res: Response) => {
         }).save()
         res.status(201).json({
             success: true,
-            message: "User registered succesfully",
+            message: "Usuario registrado",
             data: nickname
         })
     } catch (error) {
         res.status(500).json({
             success: false,
-            message: "User cant be registered",
+            message: "Usuario no pudo ser registrado",
             error: error
         })
     }
 }
 
+export const login = async (req: Request, res: Response) => {
+
+    try {
+        const email = req.body.email
+        const password = req.body.password
+
+        if (!email || !password) {
+            return res.status(400).json({
+                success: false,
+                message: "email y contraseña son obligatorios"
+            })
+        }
+
+        const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+        if (!validEmail.test(email)) {
+            return res.status(400).json(
+                {
+                    success: false,
+                    message: "Formato de email incorrecto"
+                }
+            )
+        }
+
+        const user = await User.findOne(
+            {
+                where: {
+                    email: email
+                },
+                select: {
+                    id: true,
+                    nickname: true,
+                    password: true,
+                    email: true,
+                    role: true
+                }
+            }
+        )
+
+        if (!user) {
+            return res.status(400).json({
+                success: false,
+                message: "Email o contraseña incorrectos"
+            })
+        }
+
+        const isValidPassword = bcrypt.compareSync(password, user.password)
+
+        if (!isValidPassword) {
+            return res.status(400).json({
+                success: false,
+                message: "Email o contraseña incorrectos"
+            })
+        }
+
+        const token = jwt.sign(
+            {
+                userId: user.id,
+                role: user!.role,
+                nickname: user.nickname,
+            },
+            process.env.JWT_SECRET as string,
+            {
+                expiresIn: "100h"
+            }
+        )
+
+        res.status(200).json({
+            success: true,
+            message: "Usuario logueado correctamente",
+            token: token
+        })
+
+    } catch (error) {
+
+        res.status(500).json({
+            success: false,
+            message: "No se pudo iniciar sesión",
+            error: error
+        })
+    }
+}
