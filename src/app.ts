@@ -5,7 +5,7 @@ import { deleteUser, getAllUsers, getMyProfile, updateProfile } from './controll
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { getGenrePosts } from './controllers/postControllers';
+import { getGenrePosts, getMyPosts } from './controllers/postControllers';
 
 export const app: Application = express();
 
@@ -33,4 +33,5 @@ app.put('/users/profile', auth, updateProfile)
 app.delete('/users/:id', deleteUser)
 
 //post routes
+app.get('/posts', auth, getMyPosts)
 app.get('/posts/:topic', auth, getGenrePosts)
