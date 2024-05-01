@@ -2,7 +2,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 
-export const getAllUsers = (req: Request, res: Response) => {
+export const getAllUsers = async (req: Request, res: Response) => {
     res.status(200).json(
         {
             success: true,
@@ -11,20 +11,44 @@ export const getAllUsers = (req: Request, res: Response) => {
     )
 }
 
+export const getMyProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.userId
+        const user = await User.findOneBy(
+            { id: (userId) },
 
-export const updateProfile = (req: Request, res: Response) => {
+        )
+        res.status(200).json(
+            {
+                success: true,
+                message: 'Users retrieved succesfully'
+            }
+        )
+    } catch (error) {
+        
+    }
+
+    
+}
+
+
+export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
         const { nickname, favSubgenre, preference, turntable, email } = req.body
 
-        // if (email) {
+        // const checkEmail = await User.findOne({
+        //     where: { email: email }
+        // })
+
+        // if (checkEmail) {
         //     return res.status(400).json({
         //         success: false,
-        //         message: "first Name, lastName and email are needed"
+        //         message: "Este email existe"
         //     })
         // }
         
-        const userUpdated = User.update(
+        const userUpdated = await User.update(
             { id: userId },
             {
                 nickname: nickname,
@@ -34,13 +58,9 @@ export const updateProfile = (req: Request, res: Response) => {
                 email: email
             }
         )
-        if(!email) {
-            return res.status(400).json({
-                    success: false,
-                    message: "first Name, lastName and email are needed"
-                })
-            }
-    res.status(200).json(
+        
+        
+        res.status(200).json(
         {
             success: true,
             message: "Perfil actualizado correctamente",
@@ -56,7 +76,7 @@ export const updateProfile = (req: Request, res: Response) => {
 }
 }
 
-export const deleteUser = (req: Request, res: Response) => {
+export const deleteUser = async (req: Request, res: Response) => {
     res.status(200).json(
         {
             success: true,

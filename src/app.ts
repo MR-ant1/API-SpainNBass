@@ -22,6 +22,7 @@ app.get('/healthy', (req, res) => {
 
 // user routes
 app.get('/users', auth, isSuperAdmin, getAllUsers)
+app.get('/')
 app.put('/users/profile', auth, updateProfile)
 app.delete('/users/:id', deleteUser)
 
