@@ -5,6 +5,7 @@ import { deleteUser, getAllUsers, getMyProfile, updateProfile } from './controll
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
+import { getGenrePosts } from './controllers/postControllers';
 
 export const app: Application = express();
 
@@ -20,13 +21,16 @@ app.get('/healthy', (req, res) => {
     );
 })
 
+// auth routes
+
+app.post('/auth/register', registerUser);
+app.post('/auth/login', login);
+
 // user routes
 app.get('/users', auth, isSuperAdmin, getAllUsers)
 app.get('/users/profile', auth, getMyProfile)
 app.put('/users/profile', auth, updateProfile)
 app.delete('/users/:id', deleteUser)
 
-// auth routes
-
-app.post('/auth/register', registerUser);
-app.post('/auth/login', login);
+//post routes
+app.get('/posts/:topic', auth, getGenrePosts)
