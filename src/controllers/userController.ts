@@ -12,64 +12,57 @@ export const getAllUsers = async (req: Request, res: Response) => {
     )
 }
 
-// export const getMyProfile = async (req: Request, res: Response) => {
-//     try {
-//         const userId = req.tokenData.userId
-//         const user = await User.findOneBy(
-//             { id: (userId) },
-//             {
-//                 nickname: true,
-//                 favSubgenre: true,
-//                 preference: true,
-//                 turntable: true,
-//                 email: true
-                
-//             }
-
-//         )
-//         res.status(200).json(
-//             {
-//                 success: true,
-//                 message: 'Users retrieved succesfully'
-//             }
-//         )
-//     } catch (error) {
-        
-//     }
+export const getMyProfile = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.userId
+        const user = await User.findOneBy(
+            {id:userId},
+        )
+        res.status(200).json(
+            {
+                success: true,
+                message: 'Users retrieved succesfully',
+                data: user
+            }
+        )
+    } catch (error) {
+        handleError(res, "Cant update users", 500)
+    }
 
     
-// }
+}
 
 
 export const updateProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
         const { nickname, favSubgenre, preference, turntable, email } = req.body
-
+        
         const checkEmail = await User.findOne({
-            where: 
-            { 
-              email: email,
-              nickname:nickname
-            }
+            where: { email: email }
         })
 
-        if (checkEmail) {
+        if (email && checkEmail) {
             throw new Error("Email ya en uso")
+        }
+        
+        const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
+        if (!validEmail.test(email)) {
+            throw new Error("Formato de email incorrecto")
         }
 
         const checkNickname = await User.findOne({
-            where: {nickname:nickname  }
+            where: { nickname: nickname  }
         })
 
-        if (checkNickname) {
+        if (nickname && checkNickname) {
             throw new Error("Nickname ya en uso")
         }
         
         const userUpdated = await User.update(
             { id: userId },
             {
-                nickname: nickname,
+                nickname:nickname,
                 favSubgenre: favSubgenre,
                 preference: preference,
                 turntable: turntable,
@@ -82,7 +75,7 @@ export const updateProfile = async (req: Request, res: Response) => {
         {
             success: true,
             message: "Perfil actualizado correctamente",
-            data: userUpdated
+            nickname, favSubgenre, preference, turntable, email
         }
     )
 } catch (error:any) {
@@ -90,6 +83,9 @@ export const updateProfile = async (req: Request, res: Response) => {
         return handleError(res, error.message, 404)
     }
     if (error.message === "Email ya en uso") {
+        return handleError(res, error.message, 404)
+    }
+    if (error.message === "Formato de email incorrecto") {
         return handleError(res, error.message, 404)
     }
     handleError(res, "Cant update users", 500)
