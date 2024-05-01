@@ -16,7 +16,7 @@ const generateFakePost = () => {
     randomPost.topic = "Club dnb";
     randomPost.picUrl = faker.internet.url();
     randomPost.owner = new User();
-    randomPost.owner.id = faker.number.int({min:1, max:5})
+    randomPost.owner.id = faker.number.int({min:1, max:10})
    
     return randomPost;
 }

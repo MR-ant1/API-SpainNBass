@@ -13,7 +13,7 @@ const generateFakeLatest = () => {
     randomLatest.description = faker.lorem.text();
     randomLatest.picUrl = faker.internet.url();
     randomLatest.user = new User();
-    randomLatest.user.id = 1;
+    randomLatest.user.id = faker.number.int({min:1, max: 10});
     return randomLatest;
 }
 

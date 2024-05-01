@@ -1,5 +1,5 @@
 
-import { BaseEntity, Column, Entity,   OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Latest } from "./Latest"
 import { Post } from "./Post"
 import { Comment } from "./Comment"
@@ -25,10 +25,10 @@ export class User extends BaseEntity {
     @Column({ name: "email" })
     email!: string
 
-    @Column({ name: "password_hash", select:false })
+    @Column({ name: "password_hash", select: false })
     password!: string
 
-    @Column({ name: "role", select:false })
+    @Column({ name: "role", select: false })
     role!: string
 
     @OneToMany(() => Latest, (latests) => latests.user)
@@ -38,4 +38,17 @@ export class User extends BaseEntity {
     @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
 
+    @ManyToMany(() => Post)
+    @JoinTable({
+        name: 'likes',
+        joinColumn: {
+            name: 'user_id',
+            referencedColumnName: 'id'
+        },
+        inverseJoinColumn: {
+            name: 'post_id',
+            referencedColumnName: 'id'
+        }
+    })
+    likes?: User[]
 }
