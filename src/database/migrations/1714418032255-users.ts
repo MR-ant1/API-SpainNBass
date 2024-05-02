@@ -30,8 +30,8 @@ export class Users1714418032255 implements MigrationInterface {
                     {
                         name: "preference",
                         type: "enum",
-                        enum: ["dnbLover", "DJ", "Producer", "DJ/Producer"],
-                        default: "'dnbLover'"
+                        enum: ["dnb Lover", "DJ", "Producer", "DJ/Producer"],
+                        default: "'dnb Lover'"
                         //Incluimos dobles comillas porque typeorm lo exige para incluir el default en la migración
                     },
                     {

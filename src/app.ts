@@ -23,15 +23,15 @@ app.get('/healthy', (req, res) => {
 
 // auth routes
 
-app.post('/auth/register', registerUser);
-app.post('/auth/login', login);
+app.post('/api/auth/register', registerUser);
+app.post('/api/auth/login', login);
 
 // user routes
-app.get('/users', auth,  getAllUsers)
-app.get('/users/profile', auth, getMyProfile)
-app.put('/users/profile', auth, updateProfile)
-app.delete('/users/:id', deleteUser)
+app.get('/api/users', auth, isSuperAdmin, getAllUsers)
+app.get('/api/users/profile', auth, getMyProfile)
+app.put('/api/users/profile', auth, updateProfile)
+app.delete('/api/users/:id', deleteUser)
 
 //post routes
-app.get('/posts', auth, getMyPosts)
-app.get('/posts/:topic', auth, getGenrePosts)
+app.get('/api/posts', auth, getMyPosts)
+app.get('/api/posts/:topic', auth, getGenrePosts)

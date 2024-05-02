@@ -27,7 +27,7 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         name: "topic",
                         type: "enum",
-                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"]
+                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up", "memes"]
                     },
                     {
                         name: "pic_url",

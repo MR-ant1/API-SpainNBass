@@ -1,6 +1,4 @@
 
-
-import bcrypt from "bcrypt"
 import {faker} from "@faker-js/faker"
 import { AppDataSource } from "../db"
 import { Latest } from "../../models/Latest"
@@ -13,7 +11,7 @@ const generateFakeLatest = () => {
     randomLatest.description = faker.lorem.text();
     randomLatest.picUrl = faker.internet.url();
     randomLatest.user = new User();
-    randomLatest.user.id = faker.number.int({min:1, max: 10});
+    randomLatest.user.id = faker.number.int({min:1, max:2})
     return randomLatest;
 }
 
@@ -22,6 +20,7 @@ export const latestSeedDataBase = async () => {
         await AppDataSource.initialize();
             
             const fakeLatests = Array.from({ length: 5 }, generateFakeLatest);
+
             await Latest.save(fakeLatests);
     
     } catch (error) {

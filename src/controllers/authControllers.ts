@@ -21,8 +21,8 @@ export const registerUser = async (req: Request, res: Response) => {
             throw new Error ("El nickname es obligatorio")
         }
 
-        if (nickname.length < 3) {
-            throw new Error("Nickname y turntable deben tener mas de 2 caracteres")
+        if (nickname.length < 3 || nickname.length > 20) {
+            throw new Error("Nickname y turntable deben tener mas de 2 y menos de 20 caracteres")
         }
 
         if (password.length < 8 || password.length > 14) {
