@@ -59,13 +59,20 @@ export const registerUser = async (req: Request, res: Response) => {
             preference: preference,
             turntable: turntable,
             email: email,
-            password: passwordEncrypted,
+            password: passwordEncrypted
 
         }).save()
+
+        const createdUser = await User.findOne({
+            where:
+        {
+            nickname:nickname
+        }})
+
         res.status(201).json({
             success: true,
             message: "Usuario registrado",
-            data: nickname
+            data: createdUser
         })
     } catch (error: any) {
         if (error.message === "Email y password son obligatorios") {

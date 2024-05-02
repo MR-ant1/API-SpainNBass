@@ -1,5 +1,5 @@
 
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
 import { Latest } from "./Latest"
 import { Post } from "./Post"
 import { Comment } from "./Comment"
@@ -30,6 +30,12 @@ export class User extends BaseEntity {
 
     @Column({ name: "role", select: false })
     role!: string
+
+    @Column({ name: "created_at", select: true })
+    createdAt!: Date
+
+    @Column({ name: "updated_at", select: true })
+    updatedAt!: Date
 
     @OneToMany(() => Latest, (latests) => latests.user)
     latests!: Latest

@@ -27,7 +27,7 @@ app.post('/auth/register', registerUser);
 app.post('/auth/login', login);
 
 // user routes
-app.get('/users', auth, isSuperAdmin, getAllUsers)
+app.get('/users', auth,  getAllUsers)
 app.get('/users/profile', auth, getMyProfile)
 app.put('/users/profile', auth, updateProfile)
 app.delete('/users/:id', deleteUser)

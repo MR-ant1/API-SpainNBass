@@ -17,14 +17,6 @@ export const getAllUsers = async (req: Request, res: Response) => {
         const users = await User.find(
 
             {
-                select: {
-                    id: true,
-                    nickname: true,
-                    favSubgenre: true,
-                    preference: true,
-                    turntable: true,
-                    email: true
-                },
                 take: limit,
                 skip: skip
             }
