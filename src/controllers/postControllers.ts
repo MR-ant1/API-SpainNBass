@@ -8,12 +8,12 @@ export const getGenrePosts = async (req: Request, res: Response) => {
         const topic = req.params.topic
         const posts = await Post.find({
             where: { topic: topic },
+            relations: { owner:true },
             
             select: {
                 title: true,
                 description: true,
                 picUrl: true,
-                owner: {id:true}
             }
         })
 
@@ -41,7 +41,13 @@ export const getMyPosts = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId
         
         const posts = await Post.find({
-        where: { owner:{ id:userId} }
+        where: { owner:{ id:userId} },
+        select: {
+            title: true,
+            description: true,
+            picUrl: true,
+            owner: {id: true}
+        }
         })
 
         if (posts.length === 0) {
