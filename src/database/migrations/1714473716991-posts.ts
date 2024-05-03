@@ -41,6 +41,12 @@ export class Posts1714473716991 implements MigrationInterface {
                         isNullable: true
                     },
                     {
+                        name: "owner_nickname",
+                        type: "varchar",
+                        length: "20",
+                        isNullable: true
+                    },
+                    {
                         name: "created_at",
                         type: "timestamp",
                         default: "CURRENT_TIMESTAMP"
@@ -56,7 +62,12 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         columnNames: ["owner_id"],
                         referencedTableName: "users",
-                        referencedColumnNames: ["id"],
+                        referencedColumnNames: ["id"]
+                    },
+                    {
+                        columnNames: ["owner_nickname"],
+                        referencedTableName: "users",
+                        referencedColumnNames: ["nickname"],
                         onUpdate: "CASCADE"
                     }
                 ]

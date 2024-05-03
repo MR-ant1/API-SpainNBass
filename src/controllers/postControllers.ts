@@ -8,8 +8,8 @@ export const getGenrePosts = async (req: Request, res: Response) => {
         const topic = req.params.topic
         const posts = await Post.find({
             where: { topic: topic },
-            relations: { owner:true },
-            
+            relations: { owner: true },
+
             select: {
                 title: true,
                 description: true,
@@ -39,32 +39,37 @@ export const getGenrePosts = async (req: Request, res: Response) => {
 export const getMyPosts = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
-        
-        const posts = await Post.find({
-        where: { owner:{ id:userId} },
+
+        const myPosts = await Post.find({
+            where: { owner: { id: userId } },
+            relations: {
+                owner: true
+            },
         select: {
-            title: true,
-            description: true,
-            picUrl: true,
-            owner: {id: true}
-        }
+                id: true,
+                title: true,
+                description: true,
+                picUrl: true,
+                owner: { id: true, nickname:true },
+                // ownerNickname: {nickname:true}
+            }
         })
 
-        if (posts.length === 0) {
-            throw new Error('No se encontraron posts creados por ti')
-        }
+        // if (posts.length === 0) {
+        //     throw new Error('No se encontraron posts creados por ti')
+        // }
 
         res.status(200).json(
             {
                 success: true,
                 message: `Tus posts han sido cargados correctamente`,
-                data: posts
+                data: myPosts
             }
         )
-    } catch (error: any) {
-        if (error.message === "No se encontraron posts creados por ti") {
-            return handleError(res, error.message, 404)
-        }
+    } catch (error) {
+        // if (error.message === "No se encontraron posts creados por ti") {
+        //     return handleError(res, error.message, 404)
+        // }
         handleError(res, "No se pudieron traer tus posts", 500)
     }
 }

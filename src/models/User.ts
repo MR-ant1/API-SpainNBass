@@ -41,10 +41,15 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Latest, (latests) => latests.user)
     latests!: Latest
+
     @OneToMany(() => Comment, (comments) => comments.user)
     comments!: Comment
+
     @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
+
+    @OneToMany(() => Post, (posts) => posts.ownerNickname)
+    postNicks!: Post
 
     @ManyToMany(() => Post)
     @JoinTable({

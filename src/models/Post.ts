@@ -32,6 +32,10 @@ export class Post extends BaseEntity {
     @JoinColumn({ name: 'owner_id' })
     owner!: User
 
+    @ManyToOne(() => User, (ownerNickname) => ownerNickname.postNicks)
+    @JoinColumn({ name: 'owner_nickname' })
+    ownerNickname!: User
+
     @OneToMany(() => Comment, (comments) => comments.post)
     comments!: Comment
 
