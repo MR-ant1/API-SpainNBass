@@ -126,7 +126,28 @@ export const deleteAccount = async (req: Request, res: Response) => {
         )
         
     } catch (error) {
-        handleError(res, "Cant delete user", 500)
+        handleError(res, "No se pudo eliminar tu cuenta", 500)
+    }
+}
+
+export const deleteUser = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.userId
+        const userDeletedId = req.params.id
+
+        const userDeleted: any = await User.findOne({where: {id:parseInt(userDeletedId)}})
+
+        const deletedUser = await User.delete(userDeleted)
+           
+        res.status(200).json(
+            {
+                success: true,
+                message: "Este usuario ha sido borrado correctamente",
+            }
+        )
+        
+    } catch (error) {
+        handleError(res, "No se pudo eliminar al usuario", 500)
     }
     
 }
