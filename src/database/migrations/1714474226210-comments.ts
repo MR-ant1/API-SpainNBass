@@ -52,7 +52,6 @@ export class Comments1714474226210 implements MigrationInterface {
                         columnNames: ["user_id"],
                         referencedTableName: "users",
                         referencedColumnNames: ["id"],
-                        onDelete: "CASCADE"
                     },
                     {
                         columnNames: ["post_id"],

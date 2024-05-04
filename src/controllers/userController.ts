@@ -2,6 +2,7 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import { handleError } from "../utils/handleError"
+import { error } from "console";
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -108,11 +109,24 @@ export const updateProfile = async (req: Request, res: Response) => {
 }
 }
 
-export const deleteUser = async (req: Request, res: Response) => {
-    res.status(200).json(
-        {
-            success: true,
-            message: "User deleted succesfully"
-        }
-    )
+export const deleteAccount = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.userId
+
+        const userDeleting: any = await User.findOne({where:{id:userId}})
+      
+
+        const deletedUser = await User.delete(userDeleting)
+           
+        res.status(200).json(
+            {
+                success: true,
+                message: "Tu cuenta se ha borrado correctamente",
+            }
+        )
+        
+    } catch (error) {
+        handleError(res, "Cant delete user", 500)
+    }
+    
 }

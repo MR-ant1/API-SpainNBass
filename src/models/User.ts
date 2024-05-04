@@ -48,9 +48,6 @@ export class User extends BaseEntity {
     @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
 
-    @OneToMany(() => Post, (posts) => posts.ownerNickname)
-    postNicks!: Post
-
     @ManyToMany(() => Post)
     @JoinTable({
         name: 'likes',

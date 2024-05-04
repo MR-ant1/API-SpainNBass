@@ -13,7 +13,7 @@ export const getGenrePosts = async (req: Request, res: Response) => {
             select: {
                 title: true,
                 description: true,
-                picUrl: true,
+                picUrl: true
             }
         })
 
@@ -49,9 +49,11 @@ export const getMyPosts = async (req: Request, res: Response) => {
                 id: true,
                 title: true,
                 description: true,
+                topic: true,
                 picUrl: true,
                 owner: { id: true, nickname:true },
-                // ownerNickname: {nickname:true}
+                createdAt: true,
+                updatedAt:true
             }
         })
 

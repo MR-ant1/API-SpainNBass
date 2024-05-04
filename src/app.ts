@@ -1,7 +1,7 @@
 
 import express, { Application } from 'express';
 import cors from 'cors'
-import { deleteUser, getAllUsers, getMyProfile, updateProfile } from './controllers/userController';
+import { deleteAccount, getAllUsers, getMyProfile, updateProfile } from './controllers/userController';
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
@@ -30,7 +30,7 @@ app.post('/api/auth/login', login);
 app.get('/api/users', auth, isSuperAdmin, getAllUsers)
 app.get('/api/users/profile', auth, getMyProfile)
 app.put('/api/users/profile', auth, updateProfile)
-app.delete('/api/users/:id', deleteUser)
+app.delete('/api/users', auth, deleteAccount)
 
 //post routes
 app.get('/api/posts', auth, getMyPosts)
