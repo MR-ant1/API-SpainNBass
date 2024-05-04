@@ -61,18 +61,6 @@ export const updateLatest = async (req: Request, res: Response) => {
         const description = req.body.description
         const picUrl = req.body.picUrl
         const latestId = req.params.id
-
-        const isOwned = await Latest.findOne(
-            {where:
-                {id:parseInt(latestId)}
-            // relations:{
-            //     user:true
-            // }
-        })
-
-        if (isOwned?.user?.id !== userId) {
-            throw new Error("No se puede actualizar el post de otro usuario")
-        }
         
         const latestUpdated: Object = await Latest.update(
             { id: parseInt(latestId) },
@@ -82,11 +70,12 @@ export const updateLatest = async (req: Request, res: Response) => {
             picUrl: picUrl
             }
         )
+
         res.status(200).json(
         {
             success: true,
             message: "Perfil actualizado correctamente",
-            data:latestUpdated
+            data:{title, description}
         }
     )
 } catch (error:any) {
@@ -100,36 +89,24 @@ export const updateLatest = async (req: Request, res: Response) => {
 }
 }
 
-// export const deleteMyPost = async (req: Request, res: Response) => {
-//     try {
-//         const userId = req.tokenData.userId;
-//         const postId = req.params.id;
+export const deleteLatest = async (req: Request, res: Response) => {
+    try {
+        const userId = req.tokenData.userId;
+        const latestId = req.params.id;
         
-//         const postDeleted: any = await Post.find({where: {id:userId}, 
-//         relations: {
-//             owner:true
-//         }})
-//     console.log(postDeleted)
-
-//         if (userId !== postDeleted.owner.id) {
-//             throw new Error("No puedes borrar el post de otro usuario")
-//         }
-//         console.log(postDeleted)
+        const latestDeleted: any = await Latest.findOne({where: {id:parseInt(latestId)}})
         
-//         await Post.remove(postDeleted)
+        await Latest.remove(latestDeleted)
            
-//         res.status(200).json(
-//             {
-//                 success: true,
-//                 message: "Se ha borrado tu post correctamente"
-//             }
-//         )
+        res.status(200).json(
+            {
+                success: true,
+                message: "Se ha borrado la noticia correctamente"
+            }
+        )
         
-//     } catch (error: any) {
-//         if (error.message === "No puedes borrar el post de otro usuario") {
-//             return handleError(res, error.message, 400)
-//         }
-//         handleError(res, "No se pudo eliminar tu post", 500)
-//     }
+    } catch (error: any) {
+        handleError(res, "No se pudo eliminar tu post", 500)
+    }
     
-// }
+}
