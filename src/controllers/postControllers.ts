@@ -7,8 +7,6 @@ export const getGenrePosts = async (req: Request, res: Response) => {
     try {
         const topic = req.params.topic
 
-
-
         const posts = await Post.find({
             where: { topic: topic },
             relations: { owner: true },
@@ -30,7 +28,6 @@ export const getGenrePosts = async (req: Request, res: Response) => {
                 }
             )
         }
-
         switch (topic) {
             case "RaggaJungle":
             case "Club dnb":
@@ -45,8 +42,7 @@ export const getGenrePosts = async (req: Request, res: Response) => {
                             success: true,
                             message: `Posts de ${topic} recuperados correctamente`,
                             data: posts
-                        }
-                    )
+                        })
                 }
         }
 
@@ -76,7 +72,6 @@ export const getMyPosts = async (req: Request, res: Response) => {
                 updatedAt: true
             }
         })
-
         if (myPosts.length === 0) {
             res.status(200).json(
                 {
@@ -85,15 +80,14 @@ export const getMyPosts = async (req: Request, res: Response) => {
                 }
             )
         } else {
-
             res.status(200).json(
                 {
                     success: true,
                     message: `Tus posts han sido cargados correctamente`,
                     data: myPosts
-                }
-            )
+                })
         }
+
     } catch (error: any) {
         if (error.message === "Esta categoría no existe") {
             return handleError(res, error.message, 404)
@@ -128,12 +122,11 @@ export const createPost = async (req: Request, res: Response) => {
             owner: { id: userId }
         }).save()
 
-        res.status(201).json(
-            {
-                success: true,
-                message: `Post publicado correctamente`
-            }
-        )
+        res.status(201).json({
+            success: true,
+            message: `Post publicado correctamente`
+        })
+
     } catch (error: any) {
         if (error.message === "Tu titulo no puede tener mas de 250 caracteres") {
             return handleError(res, error.message, 404)
@@ -147,16 +140,14 @@ export const createPost = async (req: Request, res: Response) => {
         if (error.message === "Categoría incorrecta") {
             return handleError(res, error.message, 404)
         }
-        handleError(res, "No se pudo crear tu Post", 500); console.log(error)
+        handleError(res, "No se pudo crear tu Post", 500)
     }
 }
 
 export const updateMyPost = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
-        const title = req.body.title
-        const description = req.body.description
-        const picUrl = req.body.picUrl
+        const { title, description, picUrl } = req.body
         const postId = req.params.id
 
         if (title && title.length > 250) {
@@ -168,43 +159,38 @@ export const updateMyPost = async (req: Request, res: Response) => {
         if (description.length > 1000) {
             throw new Error("Tu descripción es superior al límite de 1000 caracteres")
         }
-
-        const findPost = await Post.find({where:{
-            id:parseInt(postId)
-        }})
+        const findPost = await Post.find({
+            where: {
+                id: parseInt(postId)
+            }
+        })
 
         if (findPost.length === 0) {
             throw new Error("Este post no existe")
         }
 
-        const authPost = await Post.find(
-            {
-                where:
-                {
-                    id: parseInt(postId),
-                    owner: { id: userId }
-                },
-                relations: {
-                    owner: true
-                }
-            })
+        const authPost = await Post.find({
+            where: {
+                id: parseInt(postId),
+                owner: { id: userId }
+            },
+            relations: {
+                owner: true
+            }
+        })
 
         if (authPost.length === 0) {
             throw new Error("No puedes editar este post")
         } else {
-
             const postUpdated = await Post.update(
                 {
                     id: parseInt(postId),
                     owner: { id: userId }
-                },
-                {
-                    title: title,
-                    description: description,
-                    picUrl: picUrl
-                }
-            )
-
+                }, {
+                title: title,
+                description: description,
+                picUrl: picUrl
+            })
             const responseData = await Post.find(
                 {
                     where:
@@ -212,15 +198,11 @@ export const updateMyPost = async (req: Request, res: Response) => {
                         id: parseInt(postId),
                     }
                 })
-
-
-            res.status(200).json(
-                {
-                    success: true,
-                    message: "Post actualizado correctamente",
-                    data: responseData
-                }
-            )
+            res.status(200).json({
+                success: true,
+                message: "Post actualizado correctamente",
+                data: responseData
+            })
         }
     } catch (error: any) {
         if (error.message === "Tu titulo no puede tener mas de 250 caracteres") {
@@ -238,7 +220,7 @@ export const updateMyPost = async (req: Request, res: Response) => {
         if (error.message === "No puedes editar este post") {
             return handleError(res, error.message, 404)
         }
-        handleError(res, "No se pudo editar tu Post", 500); console.log(error)
+        handleError(res, "No se pudo editar tu Post", 500)
     }
 }
 
@@ -248,32 +230,30 @@ export const updatePostTopic = async (req: Request, res: Response) => {
         const postId = req.params.id
         const topic = req.body.topic
 
-        const findPost = await Post.find({where:{
-            id:parseInt(postId)
-        }})
+        const findPost = await Post.find({
+            where: {
+                id: parseInt(postId)
+            }
+        })
 
         if (findPost.length === 0) {
             throw new Error("Este post no existe")
         }
-
         const topicUpdated = await Post.update({ id: parseInt(postId) },
             {
                 topic: topic
-            }
-        )
+            })
 
-        res.status(200).json(
-            {
-                success: true,
-                message: "Categoría actualizada correctamente"
-            }
-        )
+        res.status(200).json({
+            success: true,
+            message: "Categoría actualizada correctamente"
+        })
 
     } catch (error: any) {
         if (error.message === "Este post no existe") {
             return handleError(res, error.message, 400)
         }
-        handleError(res, "No se pudo editar el topic", 500);
+        handleError(res, "No se pudo editar el topic", 500)
     }
 }
 
@@ -282,10 +262,8 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId;
         const postId = req.params.id;
 
-        const findPost = await Post.find({where:{id:parseInt(postId)}})
-        if (findPost.length === 0) {
-            throw new Error("Este post no existe")
-        }
+        const findPost = await Post.find({ where: { id: parseInt(postId) } })
+        if (findPost.length === 0) { throw new Error("Este post no existe") }
 
         const postDeleted = await Post.findOne({
             where: {
@@ -296,22 +274,19 @@ export const deleteMyPost = async (req: Request, res: Response) => {
                 owner: true
             },
             select: {
-                id:true,
-                owner: {id: true}
+                id: true,
+                owner: { id: true }
             }
-            
         })
-
-        if (postDeleted?.owner.id !== userId){
+        if (postDeleted?.owner.id !== userId) {
             throw new Error("No puedes borrar el post de otro usuario")
-        }else {
+        } else {
             await Post.remove(postDeleted)
             res.status(200).json(
                 {
                     success: true,
                     message: "Se ha borrado tu post correctamente"
-                }
-            )
+                })
         }
 
     } catch (error: any) {
@@ -321,7 +296,6 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         if (error.message === "Este post no existe") {
             return handleError(res, error.message, 400)
         }
-        handleError(res, "No se pudo eliminar tu post", 500); console.log(error)
+        handleError(res, "No se pudo eliminar tu post", 500);
     }
-
 }
