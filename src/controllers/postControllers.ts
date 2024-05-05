@@ -71,7 +71,7 @@ export const getMyPosts = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
     try {
-        const {title, description, picUrl} = req.body
+        const {title, description, picUrl, topic} = req.body
         const userId = req.tokenData.userId
         const userNick = req.tokenData.nickname
 
@@ -84,11 +84,15 @@ export const createPost = async (req: Request, res: Response) => {
         if (description.length > 1000) {
             throw new Error("Tu descripción es superior al límite de 1000 caracteres")
         }
+        if(topic !== ("RaggaJungle" || "Club dnb"|| "Liquid dnb"|| "NeuroFunk"|| "Rollers"|| "Jump Up"|| "memes")) {
+            throw new Error("Categoría incorrecta")
+        }
 
         const newPost = await Post.create({
           title: title,
           description:description,
           picUrl:picUrl,
+          topic: topic,
           owner: {id:userId, nickname:userNick}
         }).save()
 
@@ -106,6 +110,9 @@ export const createPost = async (req: Request, res: Response) => {
             return handleError(res, error.message, 404)
         }
         if (error.message === "Tu descripción es superior al límite de 1000 caracteres") {
+            return handleError(res, error.message, 404)
+        }
+        if (error.message === "Categoría incorrecta") {
             return handleError(res, error.message, 404)
         }
         handleError(res, "No se pudo crear tu Post", 500)
