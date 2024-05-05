@@ -8,6 +8,7 @@ import { isSuperAdmin } from './middlewares/isSuperAdmin';
 import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
 import { createComment, deleteMyComment, deleteOthersComment, getPostComments } from './controllers/commentControllers';
+import { sendOrRemoveLike } from './controllers/likeControllers';
 
 export const app: Application = express();
 
@@ -54,3 +55,7 @@ app.get('/api/comments/:id', auth, getPostComments)
 app.post('/api/comments/:id', auth, createComment)
 app.delete('/api/comments/:id', auth, deleteOthersComment)
 app.delete('/api/comments/own/:id', auth, deleteMyComment)
+
+// Likes endpoints
+app.post('/api/likes/:id', auth, sendOrRemoveLike)
+app.delete('/api/likes')

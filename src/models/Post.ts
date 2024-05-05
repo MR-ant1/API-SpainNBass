@@ -35,6 +35,9 @@ export class Post extends BaseEntity {
     @OneToMany(() => Comment, (comments) => comments.post)
     comments!: Comment
 
+    // @OneToMany(() => Like, (likes) => likes.post)
+    // likes!: Like
+
     @ManyToMany(() => User)
     @JoinTable({
         name: 'likes',

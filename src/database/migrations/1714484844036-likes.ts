@@ -1,3 +1,4 @@
+
 import { MigrationInterface, QueryRunner, Table } from "typeorm";
 
 export class Likes1714484844036 implements MigrationInterface {
@@ -23,6 +24,17 @@ export class Likes1714484844036 implements MigrationInterface {
                         name: "post_id",
                         type: "int",
                         isNullable: true
+                    },
+                    {
+                        name: "created_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP"
+                    },
+                    {
+                        name: "updated_at",
+                        type: "timestamp",
+                        default: "CURRENT_TIMESTAMP",
+                        onUpdate: "CURRENT_TIMESTAMP"
                     }
                 ],
                 foreignKeys: [

@@ -1,8 +1,9 @@
 
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn, Timestamp } from "typeorm"
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm"
 import { Latest } from "./Latest"
 import { Post } from "./Post"
 import { Comment } from "./Comment"
+import { Like } from "../models/Like"
 
 
 @Entity('users')
@@ -47,6 +48,9 @@ export class User extends BaseEntity {
 
     @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
+
+    // @OneToMany(() => Like, (likes) => likes.user)
+    // likes!: Like
 
     @ManyToMany(() => Post)
     @JoinTable({
