@@ -2,8 +2,6 @@
 import { Request, Response } from "express";
 import { handleError } from "../utils/handleError";
 import { Latest } from "../models/Latest";
-import { title } from "process";
-import { describe } from "node:test";
 
 export const getLatests = async (req: Request, res: Response) => {
     try {
@@ -56,7 +54,6 @@ export const createLatest =  (req: Request, res: Response) => {
 
 export const updateLatest = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData?.userId
         const title = req.body.title
         const description = req.body.description
         const picUrl = req.body.picUrl
@@ -91,7 +88,6 @@ export const updateLatest = async (req: Request, res: Response) => {
 
 export const deleteLatest = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.userId;
         const latestId = req.params.id;
         
         const latestDeleted: any = await Latest.findOne({where: {id:parseInt(latestId)}})

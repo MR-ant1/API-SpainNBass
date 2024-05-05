@@ -5,7 +5,7 @@ import { deleteAccount, deleteUser, getAllUsers, getMyProfile, updateProfile } f
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { createPost, deleteMyPost, getGenrePosts, getMyPosts } from './controllers/postControllers';
+import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
 
 export const app: Application = express();
@@ -38,6 +38,8 @@ app.delete('/api/users/:id', auth, isSuperAdmin, deleteUser)
 app.get('/api/posts', auth, getMyPosts)
 app.get('/api/posts/:topic', auth, getGenrePosts)
 app.post('/api/posts', auth, createPost)
+app.put('/api/posts/:id', auth, updatePostTopic)
+app.put('/api/posts/own/:id', auth, updateMyPost)
 app.delete('/api/posts/own/:id', auth, deleteMyPost)
 
 // Latests routes

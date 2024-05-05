@@ -17,7 +17,8 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         name: "title",
                         type: "varchar",
-                        length: "250"
+                        length: "250",
+                        isNullable: true
                     },
                     {
                         name: "description",
