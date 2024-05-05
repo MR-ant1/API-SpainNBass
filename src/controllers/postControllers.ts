@@ -204,9 +204,6 @@ export const updateMyPost = async (req: Request, res: Response) => {
                     where:
                     {
                         id: parseInt(postId),
-                    },
-                    relations: {
-                        owner: true
                     }
                 })
 
@@ -273,29 +270,43 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId;
         const postId = req.params.id;
 
-        const postDeleted: any = await Post.findOne({
+        const findPost = await Post.find({where:{id:parseInt(postId)}})
+        if (findPost.length === 0) {
+            throw new Error("Este post no existe")
+        }
+
+        const postDeleted = await Post.findOne({
             where: {
                 id: parseInt(postId),
                 owner: { id: userId }
+            },
+            relations: {
+                owner: true
+            },
+            select: {
+                id:true,
+                owner: {id: true}
             }
+            
         })
 
-
-        if (postDeleted === null) {
+        if (postDeleted?.owner.id !== userId){
             throw new Error("No puedes borrar el post de otro usuario")
+        }else {
+            await Post.remove(postDeleted)
+            res.status(200).json(
+                {
+                    success: true,
+                    message: "Se ha borrado tu post correctamente"
+                }
+            )
         }
-
-        await Post.remove(postDeleted)
-
-        res.status(200).json(
-            {
-                success: true,
-                message: "Se ha borrado tu post correctamente"
-            }
-        )
 
     } catch (error: any) {
         if (error.message === "No puedes borrar el post de otro usuario") {
+            return handleError(res, error.message, 400)
+        }
+        if (error.message === "Este post no existe") {
             return handleError(res, error.message, 400)
         }
         handleError(res, "No se pudo eliminar tu post", 500); console.log(error)
