@@ -49,8 +49,8 @@ export const getAllUsers = async (req: Request, res: Response) => {
 export const getMyProfile = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
-        const user = await User.findOneBy(
-            {id:userId},
+        const user = await User.findOne({where:
+            {id:userId}},
         )
         res.status(200).json(
             {

@@ -106,9 +106,8 @@ export const createPost = async (req: Request, res: Response) => {
     try {
         const { title, description, picUrl, topic } = req.body
         const userId = req.tokenData.userId
-        const userNick = req.tokenData.nickname
 
-        if (title.length > 250) {
+        if (title && title.length > 250) {
             throw new Error("Tu titulo no puede tener mas de 250 caracteres")
         }
         if (picUrl.length > 250) {
@@ -148,7 +147,7 @@ export const createPost = async (req: Request, res: Response) => {
         if (error.message === "Categoría incorrecta") {
             return handleError(res, error.message, 404)
         }
-        handleError(res, "No se pudo crear tu Post", 500)
+        handleError(res, "No se pudo crear tu Post", 500); console.log(error)
     }
 }
 
@@ -159,19 +158,26 @@ export const updateMyPost = async (req: Request, res: Response) => {
         const description = req.body.description
         const picUrl = req.body.picUrl
         const postId = req.params.id
-        const userNick = req.tokenData.nickname
 
-        // if (title.length > 250) {
-        //     throw new Error("Tu titulo no puede tener mas de 250 caracteres")
-        // }
-        // if (picUrl.length > 250) {
-        //     throw new Error("Tu enlace es demasiado largo")
-        // }
-        // if (description.length > 1000) {
-        //     throw new Error("Tu descripción es superior al límite de 1000 caracteres")
-        // }
+        if (title && title.length > 250) {
+            throw new Error("Tu titulo no puede tener mas de 250 caracteres")
+        }
+        if (picUrl && picUrl.length > 250) {
+            throw new Error("Tu enlace supera los 250 caracteres permitidos")
+        }
+        if (description.length > 1000) {
+            throw new Error("Tu descripción es superior al límite de 1000 caracteres")
+        }
 
-        const findPost = await Post.find(
+        const findPost = await Post.find({where:{
+            id:parseInt(postId)
+        }})
+
+        if (findPost.length === 0) {
+            throw new Error("Este post no existe")
+        }
+
+        const authPost = await Post.find(
             {
                 where:
                 {
@@ -183,7 +189,7 @@ export const updateMyPost = async (req: Request, res: Response) => {
                 }
             })
 
-        if (findPost.length === 0) {
+        if (authPost.length === 0) {
             throw new Error("No puedes editar este post")
         } else {
 
@@ -211,7 +217,7 @@ export const updateMyPost = async (req: Request, res: Response) => {
             res.status(200).json(
                 {
                     success: true,
-                    message: "Perfil actualizado correctamente",
+                    message: "Post actualizado correctamente",
                     data: responseData
                 }
             )
@@ -220,10 +226,13 @@ export const updateMyPost = async (req: Request, res: Response) => {
         if (error.message === "Tu titulo no puede tener mas de 250 caracteres") {
             return handleError(res, error.message, 400)
         }
-        if (error.message === "Tu enlace es demasiado largo") {
+        if (error.message === "Tu enlace supera los 250 caracteres permitidos") {
             return handleError(res, error.message, 400)
         }
         if (error.message === "Tu descripción es superior al límite de 1000 caracteres") {
+            return handleError(res, error.message, 400)
+        }
+        if (error.message === "Este post no existe") {
             return handleError(res, error.message, 400)
         }
         if (error.message === "No puedes editar este post") {
@@ -239,9 +248,13 @@ export const updatePostTopic = async (req: Request, res: Response) => {
         const postId = req.params.id
         const topic = req.body.topic
 
-        // if (topic !== ("RaggaJungle"||"Club dnb"|| "Liquid dnb"|| "NeuroFunk"||"Rollers"||"Jump Up"||"memes")) {
-        //     throw new Error("Inserte un topic válido")
-        // } REVISAR ESTA VALIDACIÓN
+        const findPost = await Post.find({where:{
+            id:parseInt(postId)
+        }})
+
+        if (findPost.length === 0) {
+            throw new Error("Este post no existe")
+        }
 
         const topicUpdated = await Post.update({ id: parseInt(postId) },
             {
@@ -252,13 +265,12 @@ export const updatePostTopic = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: "Perfil actualizado correctamente",
-                data: topicUpdated
+                message: "Categoría actualizada correctamente"
             }
         )
 
     } catch (error: any) {
-        if (error.message === "Inserte un topic válido") {
+        if (error.message === "Este post no existe") {
             return handleError(res, error.message, 400)
         }
         handleError(res, "No se pudo editar el topic", 500);

@@ -7,6 +7,7 @@ import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
 import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
+import { getPostComments } from './controllers/commentControllers';
 
 export const app: Application = express();
 
@@ -47,3 +48,6 @@ app.get('/api/latests', getLatests)
 app.post('/api/latests', auth, createLatest)
 app.put('/api/latests/:id', auth, updateLatest)
 app.delete('/api/latests/:id', auth, deleteLatest)
+
+// Comments routes
+app.get('/api/comments/:id', auth, getPostComments)
