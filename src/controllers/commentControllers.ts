@@ -132,3 +132,42 @@ export const createComment = async (req: Request, res: Response) => {
         }
     }
     
+    export const deleteOthersComment = async (req: Request, res: Response) => {
+        try {
+            const commentId = req.params.id;
+    
+            const findComment = await Comment.find({ where: { id: parseInt(commentId) }})
+            
+            if (findComment.length === 0) 
+                { 
+                    throw new Error("Este comentario no existe") 
+                }
+    
+            const commentDeleted = await Comment.find({
+                where: {
+                    id: parseInt(commentId)
+                },
+                relations: {
+                    user: true
+                },
+                select: {
+                    id: true,
+                    user: { id: true }
+                }
+            })
+                await Comment.remove(commentDeleted)
+
+                res.status(200).json(
+                    {
+                        success: true,
+                        message: "Se ha borrado el comentario correctamente"
+                    })
+            }
+    
+         catch (error: any) {
+            if (error.message === "Este comentario no existe") {
+                return handleError(res, error.message, 404)
+            }
+            handleError(res, "No se pudo eliminar tu comentario", 500)
+        }
+    }
