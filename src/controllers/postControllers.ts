@@ -71,7 +71,9 @@ export const getMyPosts = async (req: Request, res: Response) => {
 
 export const createPost = async (req: Request, res: Response) => {
     try {
-        const [title, description, picUrl] = req.body
+        const {title, description, picUrl} = req.body
+        const userId = req.tokenData.userId
+        const userNick = req.tokenData.nickname
 
         if (title.length > 250) {
             throw new Error("Tu titulo no puede tener mas de 250 caracteres")
@@ -87,6 +89,7 @@ export const createPost = async (req: Request, res: Response) => {
           title: title,
           description:description,
           picUrl:picUrl,
+          owner: {id:userId, nickname:userNick}
         }).save()
 
         res.status(201).json(
@@ -114,16 +117,14 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId;
         const postId = req.params.id;
         
-        const postDeleted: any = await Post.find({where: {id:userId}, 
-        relations: {
-            owner:true
-        }})
-    console.log(postDeleted)
+        const postDeleted: any = await Post.findOne({where: {id:parseInt(postId),
+            owner: {id:userId}
+         }})
+   
 
-        if (userId !== postDeleted.owner.id) {
+        if (postDeleted===null) {
             throw new Error("No puedes borrar el post de otro usuario")
         }
-        console.log(postDeleted)
         
         await Post.remove(postDeleted)
            
@@ -138,7 +139,7 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         if (error.message === "No puedes borrar el post de otro usuario") {
             return handleError(res, error.message, 400)
         }
-        handleError(res, "No se pudo eliminar tu post", 500)
+        handleError(res, "No se pudo eliminar tu post", 500); console.log(error)
     }
     
 }
