@@ -1,14 +1,14 @@
 
 import express, { Application } from 'express';
 import cors from 'cors'
-import { deleteAccount, deleteUser, getAllUsers, getMyProfile, getUserLikes, updateProfile } from './controllers/userController';
+import { deleteAccount, deleteUser, getAllUsers, getMyProfile,  updateProfile } from './controllers/userController';
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { createPost, deleteMyPost, getGenrePosts, getMyPosts, getPostLikes, updateMyPost, updatePostTopic } from './controllers/postControllers';
+import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
 import { createComment, deleteMyComment, deleteOthersComment, getPostComments } from './controllers/commentControllers';
-import { sendOrRemoveLike } from './controllers/likeControllers';
+import { getPostLikes, getUserLikes, sendOrRemoveLike } from './controllers/likeControllers';
 
 export const app: Application = express();
 

@@ -2,11 +2,12 @@
 import { Request, Response } from "express";
 import { handleError } from "../utils/handleError";
 import { Post } from "../models/Post";
-import { Like } from "../models/Like";
 
 export const getGenrePosts = async (req: Request, res: Response) => {
     try {
         const topic = req.params.topic
+
+        // const token = req.headers.authorization?.split(" ")[1];
 
         const posts = await Post.find({
             where: { topic: topic },
@@ -299,39 +300,5 @@ export const deleteMyPost = async (req: Request, res: Response) => {
             return handleError(res, error.message, 400)
         }
         handleError(res, "No se pudo eliminar tu post", 500);
-    }
-}
-
-export const getPostLikes = async (req: Request, res: Response) => {
-    try {
-        const postId = req.params.id
-
-        const myPosts = await Like.find({
-            where: { post: { id: parseInt(postId) } },
-            relations: {
-                user: true
-            },
-            // select: {
-            //     user: {id:true,nickname:true}
-            // }
-        })
-        if (myPosts.length === 0) {
-            res.status(200).json(
-                {
-                    success: true,
-                    message: "Aun no existen likes para este post"
-                }
-            )
-        } else {
-            res.status(200).json(
-                {
-                    success: true,
-                    message: `Likes a este post cargados`,
-                    data: myPosts
-                })
-        }
-
-    } catch (error) {
-        handleError(res, "No se pudieron traer los likes a este post", 500)
     }
 }
