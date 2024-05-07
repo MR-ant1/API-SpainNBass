@@ -10,7 +10,6 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId
         const postId = req.params.id
 
-
         const findPost = await Post.find({ where: { id: parseInt(postId) } })
 
         if (findPost.length === 0) {
@@ -23,6 +22,12 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
                 {
                     user: { id: userId },
                     post: { id: parseInt(postId) }
+                },
+                relations:{
+                    user:true
+                },
+                select: {
+                    user: {nickname:true, favSubgenre:true}
                 }
             })
         if (LikeOrDislike.length === 0) {
@@ -35,7 +40,8 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
             res.status(201).json(
                 {
                     success: true,
-                    message: 'Like'
+                    message: 'Like',
+                    data:LikeOrDislike
                 }
             )
 
@@ -45,7 +51,8 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
             res.status(201).json(
                 {
                     success: true,
-                    message: "Disliked"
+                    message: "Disliked",
+                    data:LikeOrDislike
                 }
             )
         }

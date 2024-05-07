@@ -49,20 +49,20 @@ export class User extends BaseEntity {
     @OneToMany(() => Post, (posts) => posts.owner)
     posts!: Post
 
-    // @OneToMany(() => Like, (likes) => likes.user)
-    // likes!: Like
+    @OneToMany(() => Like, (likes) => likes.user)
+    likes!: Like
 
-    @ManyToMany(() => Post)
-    @JoinTable({
-        name: 'likes',
-        joinColumn: {
-            name: 'user_id',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'post_id',
-            referencedColumnName: 'id'
-        }
-    })
-    likes!: User[]
+//     @ManyToMany(() => Post)
+//     @JoinTable({
+//         name: 'likes',
+//         joinColumn: {
+//             name: 'user_id',
+//             referencedColumnName: 'id'
+//         },
+//         inverseJoinColumn: {
+//             name: 'post_id',
+//             referencedColumnName: 'id'
+//         }
+//     })
+//     likes!: User[]
 }

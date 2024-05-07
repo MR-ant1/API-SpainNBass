@@ -1,11 +1,11 @@
 
 import express, { Application } from 'express';
 import cors from 'cors'
-import { deleteAccount, deleteUser, getAllUsers, getMyProfile, updateProfile } from './controllers/userController';
+import { deleteAccount, deleteUser, getAllUsers, getMyProfile, getUserLikes, updateProfile } from './controllers/userController';
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
+import { createPost, deleteMyPost, getGenrePosts, getMyPosts, getPostLikes, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
 import { createComment, deleteMyComment, deleteOthersComment, getPostComments } from './controllers/commentControllers';
 import { sendOrRemoveLike } from './controllers/likeControllers';
@@ -44,6 +44,7 @@ app.put('/api/posts/:id', auth, updatePostTopic)
 app.put('/api/posts/own/:id', auth, updateMyPost)
 app.delete('/api/posts/own/:id', auth, deleteMyPost)
 
+
 // Latests routes
 app.get('/api/latests', getLatests)
 app.post('/api/latests', auth, createLatest)
@@ -56,6 +57,7 @@ app.post('/api/comments/:id', auth, createComment)
 app.delete('/api/comments/:id', auth, deleteOthersComment)
 app.delete('/api/comments/own/:id', auth, deleteMyComment)
 
-// Likes endpoints
+// Likes endpoint
 app.post('/api/likes/:id', auth, sendOrRemoveLike)
-app.delete('/api/likes')
+app.get('/api/likes/posts/:id', auth, getPostLikes)
+app.get('/api/likes/users/:id', auth, getUserLikes)

@@ -3,6 +3,7 @@
 import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne,  OneToMany,  PrimaryGeneratedColumn } from "typeorm"
 import { User } from "./User"
 import { Comment } from "./Comment"
+import { Like } from "./Like"
 
 
 @Entity('posts')
@@ -35,20 +36,20 @@ export class Post extends BaseEntity {
     @OneToMany(() => Comment, (comments) => comments.post)
     comments!: Comment
 
-    // @OneToMany(() => Like, (likes) => likes.post)
-    // likes!: Like
+    @OneToMany(() => Like, (likes) => likes.post)
+    likes!: Like
 
-    @ManyToMany(() => User)
-    @JoinTable({
-        name: 'likes',
-        joinColumn: {
-            name: 'post_id',
-            referencedColumnName: 'id'
-        },
-        inverseJoinColumn: {
-            name: 'user_id',
-            referencedColumnName: 'id'
-        }
-    })
-    likes!: Post[]
+    // @ManyToMany(() => User)
+    // @JoinTable({
+    //     name: 'likes',
+    //     joinColumn: {
+    //         name: 'post_id',
+    //         referencedColumnName: 'id'
+    //     },
+    //     inverseJoinColumn: {
+    //         name: 'user_id',
+    //         referencedColumnName: 'id'
+    //     }
+    // })
+    // likes!: User[]
 }
