@@ -301,3 +301,28 @@ export const deleteMyPost = async (req: Request, res: Response) => {
         handleError(res, "No se pudo eliminar tu post", 500);
     }
 }
+
+export const deleteOtherUserPost = async (req: Request, res: Response) => {
+    try {
+        const postId = req.params.id;
+
+        const findPost = await Post.find({ where: { id: parseInt(postId) } 
+        })
+        if (findPost.length === 0) { throw new Error("Este post no existe") }
+
+            await Post.remove(findPost)
+            res.status(200).json(
+                {
+                    success: true,
+                    message: "Se ha borrado el post correctamente",
+                    data:findPost
+                })
+        
+
+    } catch (error: any) {
+        if (error.message === "Este post no existe") {
+            return handleError(res, error.message, 400)
+        }
+        handleError(res, "No se pudo eliminar el post", 500);
+    }
+}

@@ -5,7 +5,7 @@ import { deleteAccount, deleteUser, getAllUsers, getMyProfile,  updateProfile } 
 import { login, registerUser } from './controllers/authControllers';
 import { auth } from './middlewares/auth';
 import { isSuperAdmin } from './middlewares/isSuperAdmin';
-import { createPost, deleteMyPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
+import { createPost, deleteMyPost, deleteOtherUserPost, getGenrePosts, getMyPosts, updateMyPost, updatePostTopic } from './controllers/postControllers';
 import { createLatest, deleteLatest, getLatests, updateLatest } from './controllers/latestControllers';
 import { createComment, deleteMyComment, deleteOthersComment, getPostComments } from './controllers/commentControllers';
 import { getPostLikes, getUserLikes, sendOrRemoveLike } from './controllers/likeControllers';
@@ -42,7 +42,9 @@ app.get('/api/posts/:topic', auth, getGenrePosts)
 app.post('/api/posts', auth, createPost)
 app.put('/api/posts/:id', auth, updatePostTopic)
 app.put('/api/posts/own/:id', auth, updateMyPost)
+app.delete('/api/posts/:id', auth, isSuperAdmin,deleteOtherUserPost)
 app.delete('/api/posts/own/:id', auth, deleteMyPost)
+
 
 
 // Latests routes
