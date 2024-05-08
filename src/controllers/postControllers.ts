@@ -14,6 +14,7 @@ export const getGenrePosts = async (req: Request, res: Response) => {
             relations: { owner: true },
 
             select: {
+                id:true,
                 title: true,
                 description: true,
                 topic: true,
@@ -107,14 +108,11 @@ export const createPost = async (req: Request, res: Response) => {
         if (title && title.length > 250) {
             throw new Error("Tu titulo no puede tener mas de 250 caracteres")
         }
-        if (picUrl.length > 250) {
+        if (picUrl && picUrl.length > 250) {
             throw new Error("Tu enlace es demasiado largo")
         }
         if (description.length > 1000) {
             throw new Error("Tu descripción es superior al límite de 1000 caracteres")
-        }
-        if (topic !== ("RaggaJungle" || "Club dnb" || "Liquid dnb" || "NeuroFunk" || "Rollers" || "Jump Up" || "memes")) {
-            throw new Error("Categoría incorrecta")
         }
 
         const newPost = await Post.create({
@@ -127,7 +125,8 @@ export const createPost = async (req: Request, res: Response) => {
 
         res.status(201).json({
             success: true,
-            message: `Post publicado correctamente`
+            message: `Post publicado correctamente`,
+            data: newPost
         })
 
     } catch (error: any) {

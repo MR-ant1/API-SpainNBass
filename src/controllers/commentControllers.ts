@@ -19,6 +19,9 @@ export const getPostComments = async (req: Request, res: Response) => {
                 where:
                 {
                     post: { id: parseInt(postId) }
+                },
+                relations: {
+                    user:true
                 }
             }
         )
@@ -35,7 +38,8 @@ export const getPostComments = async (req: Request, res: Response) => {
             res.status(200).json(
                 {
                     success: true,
-                    message: 'Este post aun no tiene comentarios'
+                    message: 'Este post aun no tiene comentarios',
+                    data: []
                 }
             ) 
         }
@@ -54,6 +58,10 @@ export const createComment = async (req: Request, res: Response) => {
         const userId = req.tokenData.userId
         const postId = req.params.id
 
+        if (!comment || comment.length <3) {
+            throw new Error("Tu comentario debe contener mínimo 3 caracteres")
+        }
+
         if (comment.length > 1000) {
             throw new Error("Tu comentario es superior al límite de 1000 caracteres")
         }
@@ -71,11 +79,15 @@ export const createComment = async (req: Request, res: Response) => {
         res.status(201).json(
             {
                 success: true,
-                message: `Comentario publicado correctamente`
+                message: `Comentario publicado correctamente`,
+                data: newComment
             }
         )
     } catch (error: any) {
         if (error.message === "Tu comentario es superior al límite de 1000 caracteres") {
+            return handleError(res, error.message, 404)
+        }
+        if (error.message === "Tu comentario debe contener mínimo 3 caracteres") {
             return handleError(res, error.message, 404)
         }
         if (error.message === "Enlace demasiado largo") {

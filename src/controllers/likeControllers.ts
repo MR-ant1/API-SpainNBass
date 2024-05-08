@@ -24,7 +24,8 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
                     post: { id: parseInt(postId) }
                 },
                 relations:{
-                    user:true
+                    user:true,
+                    post:true
                 },
                 select: {
                     user: {nickname:true, favSubgenre:true}
@@ -37,11 +38,25 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
 
             }).save()
 
+            const liked = await Like.find({
+                where: {
+                    user: { id: userId },
+                    post: { id: parseInt(postId) }
+                },
+                relations:{
+                    post:true,
+                    user:true
+                },
+                select: {
+                    user: {nickname:true, favSubgenre:true}
+                }
+            })
+
             res.status(201).json(
                 {
                     success: true,
                     message: 'Like',
-                    data:LikeOrDislike
+                    data:liked
                 }
             )
 
@@ -109,15 +124,16 @@ export const getPostLikes = async (req: Request, res: Response) => {
             relations: {
                 user: true
             },
-            // select: {
-            //     user: {id:true,nickname:true}
-            // }
+            select: {
+                user: {id:true,nickname:true}
+            }
         })
         if (myPosts.length === 0) {
             res.status(200).json(
                 {
                     success: true,
-                    message: "Aun no existen likes para este post"
+                    message: "Aun no existen likes para este post",
+                    data: []
                 }
             )
         } else {

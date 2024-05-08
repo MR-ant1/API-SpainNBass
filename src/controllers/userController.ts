@@ -2,8 +2,6 @@
 import { Request, Response } from "express";
 import { User } from "../models/User";
 import { handleError } from "../utils/handleError"
-import { error } from "console";
-import { Like } from "../models/Like";
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
@@ -27,6 +25,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
             return res.status(404).json({
                 success: false,
                 message: "No existen usuarios",
+                data:[]
             })
         }
         res.status(200).json(
@@ -117,7 +116,6 @@ export const updateProfile = async (req: Request, res: Response) => {
         if (error.message === "Tu nickname tiene que tener  3 o más caracteres y menos de 21") {
             return handleError(res, error.message, 400)
         }
-
         handleError(res, "No se pudo actualizar tu perfil", 500)
     }
 }
@@ -128,6 +126,9 @@ export const deleteAccount = async (req: Request, res: Response) => {
 
         const userDeleting: any = await User.findOne({ where: { id: userId } })
 
+        if (userDeleting.role === "super_admin") {
+            throw new Error("Tu cuenta super admin no puede ser borrada")
+        }
 
         const deletedUser = await User.delete(userDeleting)
 
@@ -138,28 +139,46 @@ export const deleteAccount = async (req: Request, res: Response) => {
             }
         )
 
-    } catch (error) {
+    } catch (error: any) {
+        if (error.message === "Tu cuenta super admin no puede ser borrada") {
+            return handleError(res, error.message, 400)
+        }
         handleError(res, "No se pudo eliminar tu cuenta", 500)
     }
 }
 
 export const deleteUser = async (req: Request, res: Response) => {
     try {
-        const userId = req.tokenData.userId
         const userDeletedId = req.params.id
 
-        const userDeleted: any = await User.findOne({ where: { id: parseInt(userDeletedId) } })
+        const userDeleted: any = await User.findOne({ where: { id: parseInt(userDeletedId) },
+    select: {role:true} 
+    })
 
-        const deletedUser = await User.delete(userDeleted)
+        if (userDeleted.role === "super_admin" || userDeleted.role === "admin") {
+            throw new Error("No puedes eliminar cuentas admin ni tu propia cuenta super_admin")
+        }
+        console.log(userDeleted.role)
+        const deletingUser = await User.delete(userDeleted)
+
+        const deletedUser = await User.find({
+            where:{
+                id:userDeleted.id
+            }
+        })
 
         res.status(200).json(
             {
                 success: true,
                 message: "Este usuario ha sido borrado correctamente",
+                data:deletedUser
             }
         )
 
-    } catch (error) {
+    } catch (error: any) {
+        if (error.message === "No puedes eliminar cuentas admin ni tu propia cuenta super_admin") {
+            return handleError(res, error.message, 400)
+        }
         handleError(res, "No se pudo eliminar al usuario", 500)
     }
 
