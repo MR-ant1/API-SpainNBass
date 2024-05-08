@@ -1,6 +1,4 @@
 
-
-
 import { BaseEntity, Column, Entity, JoinColumn, ManyToOne,  PrimaryGeneratedColumn } from "typeorm"
 import { User } from "./User"
 import { Post } from "./Post"
@@ -16,6 +14,12 @@ export class Comment extends BaseEntity {
 
     @Column({ name: "url" })
     url!: string
+
+    @Column({ name: "created_at", select: true })
+    createdAt!: Date
+
+    @Column({ name: "updated_at", select: true })
+    updatedAt!: Date
 
     @ManyToOne(() => User, (user) => user.comments)
     @JoinColumn({ name: 'user_id' })

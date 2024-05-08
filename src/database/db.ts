@@ -11,6 +11,7 @@ import { User } from "../models/User";
 import { Latest } from "../models/Latest";
 import { Post } from "../models/Post";
 import { Comment } from "../models/Comment";
+import { Like } from "../models/Like";
 
 
 
@@ -21,7 +22,7 @@ export const AppDataSource = new DataSource({
     username: process.env.DB_USER || "root",
     password: process.env.DB_PASSWORD || "",
     database: process.env.DB_DATABASE || "test",
-    entities: [User, Latest, Post, Comment, ],
+    entities: [User, Latest, Post, Comment, Like],
     migrations: [Users1714418032255, Latests1714470644500, Posts1714473716991, Comments1714474226210, Likes1714484844036],
     synchronize: false,
     logging: false,

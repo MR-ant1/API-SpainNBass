@@ -11,9 +11,9 @@ const generateFakeComment = () => {
     randomComment.comment = faker.lorem.words();
     randomComment.url = faker.internet.url();
     randomComment.user = new User();
-    randomComment.user.id = 2;
+    randomComment.user.id = faker.number.int({min:1, max:10});
     randomComment.post = new Post();
-    randomComment.post.id = 2;
+    randomComment.post.id = faker.number.int({min:1, max:4});
     return randomComment;
 }
 

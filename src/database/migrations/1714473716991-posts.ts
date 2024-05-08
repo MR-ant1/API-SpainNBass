@@ -17,7 +17,8 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         name: "title",
                         type: "varchar",
-                        length: "250"
+                        length: "250",
+                        isNullable: true
                     },
                     {
                         name: "description",
@@ -27,7 +28,8 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         name: "topic",
                         type: "enum",
-                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"]
+                        enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up", "memes"],
+                        isNullable: true
                     },
                     {
                         name: "pic_url",
@@ -56,8 +58,7 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         columnNames: ["owner_id"],
                         referencedTableName: "users",
-                        referencedColumnNames: ["id"],
-                        onUpdate: "CASCADE"
+                        referencedColumnNames: ["id"]
                     }
                 ]
             }),

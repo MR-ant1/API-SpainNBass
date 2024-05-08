@@ -1,8 +1,9 @@
 
 export interface TokenData {
     userId: number;
-    roleName: string;
-    firstName: string;
+    role: string;
+    nickname: string;
+    favSubgenre: string
 };
 
 
