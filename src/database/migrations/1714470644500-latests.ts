@@ -50,7 +50,8 @@ export class Latests1714470644500 implements MigrationInterface {
                     {
                         columnNames: ["user_id"],
                         referencedTableName: "users",
-                        referencedColumnNames: ["id"]
+                        referencedColumnNames: ["id"],
+                        onDelete:"CASCADE"
                     }
                 ]
             }),

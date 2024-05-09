@@ -45,11 +45,9 @@ app.put('/api/posts/own/:id', auth, updateMyPost)
 app.delete('/api/posts/:id', auth, isSuperAdmin,deleteOtherUserPost)
 app.delete('/api/posts/own/:id', auth, deleteMyPost)
 
-
-
 // Latests routes
 app.get('/api/latests', getLatests)
-app.post('/api/latests', auth, createLatest)
+app.post('/api/latests', auth, isSuperAdmin, createLatest)
 app.put('/api/latests/:id', auth, updateLatest)
 app.delete('/api/latests/:id', auth, deleteLatest)
 
@@ -62,4 +60,4 @@ app.delete('/api/comments/own/:id', auth, deleteMyComment)
 // Likes endpoint
 app.post('/api/likes/:id', auth, sendOrRemoveLike)
 app.get('/api/likes/posts/:id', auth, getPostLikes)
-app.get('/api/likes/users/:id', auth, getUserLikes)
+app.get('/api/likes/users', auth, getUserLikes)

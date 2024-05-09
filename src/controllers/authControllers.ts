@@ -171,7 +171,7 @@ export const login = async (req: Request, res: Response) => {
             return handleError(res, error.message, 400)
         }
         if (error.message === "Email o contraseña incorrectos") {
-            return handleError(res, error.message, 404)
+            return handleError(res, error.message, 400)
         }
         handleError(res, "Cant update users", 500)
     }

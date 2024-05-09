@@ -27,27 +27,49 @@ export const getLatests = async (req: Request, res: Response) => {
     }
 }
 
-export const createLatest =  (req: Request, res: Response) => {
+export const createLatest =  async (req: Request, res: Response) => {
     try {
         const title = req.body.title
         const description = req.body.description
         const picUrl = req.body.picUrl
         const userId = req.tokenData.userId
 
-        const createLatest = Latest.create({
+        if ( !title || !description) {
+            throw new Error("Título y descripción son obligatorios")
+        }
+
+        if (title.length < 3 || title.length > 250) {
+            throw new Error("El título debe tener entre 3 y 250 caracteres")
+        }
+        if (description.length < 3 || description.length > 1000) {
+            throw new Error("La descripción debe tener entre 3 y 250 caracteres")
+        }
+
+        const createLatest: Object = Latest.create({
             title: title,
             description: description,
-            picUrl: picUrl,
-            user: { id: userId }
+            picUrl: picUrl
         }).save()
+
+        const newLatest = await Latest.find(createLatest)
 
         res.status(201).json(
             {
                 success: true,
                 message: `La noticia se ha creado correctamente`,
+                data: newLatest
             }
         )
-    } catch (error) {
+    } catch (error: any) {
+        if (error.message === "Título y descripción son obligatorios") {
+            return handleError(res, error.message, 404)
+        }
+        if (error.message === "El título debe tener entre 3 y 250 caracteres") {
+            return handleError(res, error.message, 404)
+        }
+        if (error.message === "La descripción debe tener entre 3 y 250 caracteres") {
+            return handleError(res, error.message, 404)
+        }
         handleError(res, "No se pudo crear la noticia", 500)
     }
 }

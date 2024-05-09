@@ -80,6 +80,12 @@ export const updateProfile = async (req: Request, res: Response) => {
             throw new Error("El campo Equipo y RRSS tiene que tener mas de 2 caracteres")
         }
 
+        const findNickname = await User.find({where: {nickname: nickname}})
+
+        if(findNickname.length > 0) {
+            throw new Error("Este nickname ya está en uso")
+        }
+
         const userUpdated = await User.update(
             { id: userId },
             {
@@ -111,6 +117,9 @@ export const updateProfile = async (req: Request, res: Response) => {
         )
     } catch (error: any) {
         if (error.message === "El campo Equipo y RRSS tiene que tener mas de 3 caracteres") {
+            return handleError(res, error.message, 400)
+        }
+        if (error.message === "Este nickname ya está en uso") {
             return handleError(res, error.message, 400)
         }
         if (error.message === "Tu nickname tiene que tener  3 o más caracteres y menos de 21") {
@@ -151,27 +160,28 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const userDeletedId = req.params.id
 
-        const userDeleted: any = await User.findOne({ where: { id: parseInt(userDeletedId) },
-    select: {role:true} 
+        const userDeleted: any = await User.find({ where: { id: parseInt(userDeletedId) },
+        select:{
+            id:true,
+            role:true
+        }
     })
+    console.log(userDeleted)
+        if (userDeleted.length === 0) {
+            throw new Error("Este usuario no existe")
+        }
 
-        if (userDeleted.role === "super_admin" || userDeleted.role === "admin") {
+        if (userDeleted?.role !== "user") {
             throw new Error("No puedes eliminar cuentas admin ni tu propia cuenta super_admin")
         }
-        console.log(userDeleted.role)
-        const deletingUser = await User.delete(userDeleted)
 
-        const deletedUser = await User.find({
-            where:{
-                id:userDeleted.id
-            }
-        })
+        const deletingUser = await User.remove(userDeleted)
 
         res.status(200).json(
             {
                 success: true,
                 message: "Este usuario ha sido borrado correctamente",
-                data:deletedUser
+                data:userDeleted
             }
         )
 
@@ -179,7 +189,10 @@ export const deleteUser = async (req: Request, res: Response) => {
         if (error.message === "No puedes eliminar cuentas admin ni tu propia cuenta super_admin") {
             return handleError(res, error.message, 400)
         }
-        handleError(res, "No se pudo eliminar al usuario", 500)
+        if (error.message === "Este usuario no existe") {
+            return handleError(res, error.message, 400)
+        }
+        handleError(res, "No se pudo eliminar el usuario", 500)
     }
 
 }

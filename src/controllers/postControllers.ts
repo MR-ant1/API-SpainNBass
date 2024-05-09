@@ -18,7 +18,9 @@ export const getGenrePosts = async (req: Request, res: Response) => {
                 title: true,
                 description: true,
                 topic: true,
-                picUrl: true
+                picUrl: true,
+                createdAt:true,
+                updatedAt:true
             }
         })
 

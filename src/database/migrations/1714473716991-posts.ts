@@ -58,7 +58,8 @@ export class Posts1714473716991 implements MigrationInterface {
                     {
                         columnNames: ["owner_id"],
                         referencedTableName: "users",
-                        referencedColumnNames: ["id"]
+                        referencedColumnNames: ["id"],
+                        onDelete: "CASCADE"
                     }
                 ]
             }),

@@ -85,28 +85,30 @@ export const getUserLikes = async (req: Request, res: Response) => {
     try {
         const userId = req.tokenData.userId
 
-        const myPosts = await Like.find({
+        const myComments = await Like.find({
             where: { user: { id: userId } },
             relations: {
-                post: true
+                post: true,
+                user:true
             },
-            // select: {
-            //     user: {id:true,nickname:true}
-            // }
+            select: {
+                post:{id:true, title:true, description:true}
+            }
         })
-        if (myPosts.length === 0) {
+      
+        if (myComments.length > 0) {
             res.status(200).json(
                 {
                     success: true,
-                    message: "Aun no has dado like a ningún post"
+                    message: "Post que te han gustado cargados correctamente",
+                    data: myComments
                 }
             )
         } else {
             res.status(200).json(
                 {
                     success: true,
-                    message: `Post que te han gustado cargados correctamente`,
-                    data: myPosts
+                    message: `Aun no has dado like a ningún post`
                 })
         }
 
@@ -122,10 +124,12 @@ export const getPostLikes = async (req: Request, res: Response) => {
         const myPosts = await Like.find({
             where: { post: { id: parseInt(postId) } },
             relations: {
-                user: true
+                user: true,
+                post: true
             },
             select: {
-                user: {id:true,nickname:true}
+                user: {id:true,nickname:true},
+                post: {id:true}
             }
         })
         if (myPosts.length === 0) {

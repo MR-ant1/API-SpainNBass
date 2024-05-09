@@ -37,7 +37,7 @@ export class Users1714418032255 implements MigrationInterface {
                     {
                         name: "turntable",
                         type: "varchar",
-                        length: "40",
+                        length: "250",
                         isNullable: true
                     },
                     {
