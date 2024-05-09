@@ -160,18 +160,18 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const userDeletedId = req.params.id
 
-        const userDeleted: any = await User.find({ where: { id: parseInt(userDeletedId) },
+        const userDeleted: any = await User.findOne({ where: { id: parseInt(userDeletedId) },
         select:{
             id:true,
             role:true
         }
     })
-    console.log(userDeleted)
+
         if (userDeleted.length === 0) {
             throw new Error("Este usuario no existe")
         }
 
-        if (userDeleted?.role !== "user") {
+        if (userDeleted.role !== "user") {
             throw new Error("No puedes eliminar cuentas admin ni tu propia cuenta super_admin")
         }
 
@@ -190,7 +190,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             return handleError(res, error.message, 400)
         }
         if (error.message === "Este usuario no existe") {
-            return handleError(res, error.message, 400)
+            return handleError(res, error.message, 404)
         }
         handleError(res, "No se pudo eliminar el usuario", 500)
     }
