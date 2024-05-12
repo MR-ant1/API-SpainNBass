@@ -5,22 +5,16 @@ import { handleError } from "../utils/handleError"
 
 export const getAllUsers = async (req: Request, res: Response) => {
     try {
-        const limit = Number(req.query.limit) || 10
-        const page = Number(req.query.page) || 1
-        const skip = (page - 1) * limit as number
+        // const limit = Number(req.query.limit) || 10
+        // const page = Number(req.query.page) || 1
+        // const skip = (page - 1) * limit as number
 
 
-        if (limit > 25) {
-            throw new Error("El máximo de usuarios por página es de 25")
-        }
+        // if (limit > 25) {
+        //     throw new Error("El máximo de usuarios por página es de 25")
+        // }
 
-        const users = await User.find(
-
-            {
-                take: limit,
-                skip: skip
-            }
-        )
+        const users = await User.find()
         if (!users) {
             return res.status(404).json({
                 success: false,
@@ -31,7 +25,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         res.status(200).json(
             {
                 success: true,
-                message: 'Users retrieved succesfully',
+                message: 'Usuarios cargados correctamente',
                 data: users
             }
         )

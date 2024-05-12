@@ -11,12 +11,14 @@ export const getLatests = async (req: Request, res: Response) => {
         if (!latests) {
             throw new Error('No se encontraron noticias')
         }
+           
+        const sortedLatests = latests.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
         res.status(200).json(
             {
                 success: true,
                 message: "Noticias cargadas correctamente",
-                data: latests
+                data: sortedLatests
             }
         )
     } catch (error: any) {
@@ -32,7 +34,6 @@ export const createLatest =  async (req: Request, res: Response) => {
         const title = req.body.title
         const description = req.body.description
         const picUrl = req.body.picUrl
-        const userId = req.tokenData.userId
 
         if ( !title || !description) {
             throw new Error("Título y descripción son obligatorios")
