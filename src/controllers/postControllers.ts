@@ -7,29 +7,28 @@ export const getGenrePosts = async (req: Request, res: Response) => {
     try {
         const topic = req.params.topic
 
-        // const token = req.headers.authorization?.split(" ")[1];
-
         const posts = await Post.find({
             where: { topic: topic },
             relations: { owner: true },
 
             select: {
-                id:true,
+                id: true,
                 title: true,
                 description: true,
                 topic: true,
                 picUrl: true,
-                createdAt:true,
-                updatedAt:true
+                createdAt: true,
+                updatedAt: true
             }
         })
+
+        const sortedPosts = posts.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
         if (posts.length === 0) {
             return res.status(200).json(
                 {
                     success: true,
                     message: "Aun no hay posts en esta categoría",
-                    data: posts
                 }
             )
         }
@@ -46,7 +45,7 @@ export const getGenrePosts = async (req: Request, res: Response) => {
                         {
                             success: true,
                             message: `Posts de ${topic} recuperados correctamente`,
-                            data: posts
+                            data: sortedPosts
                         })
                 }
         }
@@ -116,14 +115,24 @@ export const createPost = async (req: Request, res: Response) => {
         if (description.length > 1000) {
             throw new Error("Tu descripción es superior al límite de 1000 caracteres")
         }
+        if (!description) {
+            throw new Error("La descripción es obligatoria")
+        }
 
         const newPost = await Post.create({
             title: title,
             description: description,
             picUrl: picUrl,
             topic: topic,
-            owner: { id: userId }
+            owner: { id: userId}
         }).save()
+
+    //     const createdPost = await Post.find({where: {
+    //         id: newPost.id
+    //     },
+    // relations:{
+    //     owner: true
+    // }})
 
         res.status(201).json({
             success: true,
@@ -133,16 +142,19 @@ export const createPost = async (req: Request, res: Response) => {
 
     } catch (error: any) {
         if (error.message === "Tu titulo no puede tener mas de 250 caracteres") {
-            return handleError(res, error.message, 404)
+            return handleError(res, error.message, 400)
+        }
+        if (error.message === "La descripción es obligatoria") {
+            return handleError(res, error.message, 400)
         }
         if (error.message === "Tu enlace es demasiado largo") {
-            return handleError(res, error.message, 404)
+            return handleError(res, error.message, 400)
         }
         if (error.message === "Tu descripción es superior al límite de 1000 caracteres") {
-            return handleError(res, error.message, 404)
+            return handleError(res, error.message, 400)
         }
         if (error.message === "Categoría incorrecta") {
-            return handleError(res, error.message, 404)
+            return handleError(res, error.message, 400)
         }
         handleError(res, "No se pudo crear tu Post", 500)
     }
@@ -308,18 +320,19 @@ export const deleteOtherUserPost = async (req: Request, res: Response) => {
     try {
         const postId = req.params.id;
 
-        const findPost = await Post.find({ where: { id: parseInt(postId) } 
+        const findPost = await Post.find({
+            where: { id: parseInt(postId) }
         })
         if (findPost.length === 0) { throw new Error("Este post no existe") }
 
-            await Post.remove(findPost)
-            res.status(200).json(
-                {
-                    success: true,
-                    message: "Se ha borrado el post correctamente",
-                    data:findPost
-                })
-        
+        await Post.remove(findPost)
+        res.status(200).json(
+            {
+                success: true,
+                message: "Se ha borrado el post correctamente",
+                data: findPost
+            })
+
 
     } catch (error: any) {
         if (error.message === "Este post no existe") {
