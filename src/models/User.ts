@@ -1,5 +1,5 @@
 
-import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn} from "typeorm"
+import { BaseEntity, Column, Entity, JoinTable, ManyToMany, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { Latest } from "./Latest"
 import { Post } from "./Post"
 import { Comment } from "./Comment"
@@ -14,18 +14,22 @@ export class User extends BaseEntity {
     @Column({ name: "nickname" })
     nickname!: string
 
-    @Column({ name: "fav_subgenre", enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"],
-    default: "'Club dnb'"})
+    @Column({
+        name: "fav_subgenre", enum: ["RaggaJungle", "Club dnb", "Liquid dnb", "NeuroFunk", "Rollers", "Jump Up"],
+        default: "'Club dnb'"
+    })
     favSubgenre!: string
 
-    @Column({ name: "preference", enum: ["dnb Lover", "DJ", "Producer", "DJ/Producer"],
-    default: "'dnb Lover'"})
+    @Column({
+        name: "preference", enum: ["dnb Lover", "DJ", "Producer", "DJ/Producer"],
+        default: "'dnb Lover'"
+    })
     preference!: string
 
     @Column({ name: "turntable" })
     turntable!: string
 
-    @Column({ name: "email"})
+    @Column({ name: "email" })
     email!: string
 
     @Column({ name: "password_hash", select: false })
@@ -52,17 +56,17 @@ export class User extends BaseEntity {
     @OneToMany(() => Like, (likes) => likes.user)
     likes!: Like
 
-//     @ManyToMany(() => Post)
-//     @JoinTable({
-//         name: 'likes',
-//         joinColumn: {
-//             name: 'user_id',
-//             referencedColumnName: 'id'
-//         },
-//         inverseJoinColumn: {
-//             name: 'post_id',
-//             referencedColumnName: 'id'
-//         }
-//     })
-//     likes!: User[]
+    //     @ManyToMany(() => Post)
+    //     @JoinTable({
+    //         name: 'likes',
+    //         joinColumn: {
+    //             name: 'user_id',
+    //             referencedColumnName: 'id'
+    //         },
+    //         inverseJoinColumn: {
+    //             name: 'post_id',
+    //             referencedColumnName: 'id'
+    //         }
+    //     })
+    //     likes!: User[]
 }

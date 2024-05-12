@@ -15,10 +15,10 @@ export const registerUser = async (req: Request, res: Response) => {
         const password = req.body.password;
 
         if (!email || !password) {
-            throw new Error ("Email y password son obligatorios")
+            throw new Error("Email y password son obligatorios")
         }
         if (!nickname) {
-            throw new Error ("El nickname es obligatorio")
+            throw new Error("El nickname es obligatorio")
         }
 
         if (nickname.length < 3 || nickname.length > 20) {
@@ -30,8 +30,8 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         const checkEmailExists = await User.findOne({
-            where: 
-            { email: email }
+            where:
+                { email: email }
         })
 
         if (checkEmailExists) {
@@ -39,13 +39,13 @@ export const registerUser = async (req: Request, res: Response) => {
         }
 
         const checkNicknameExists = await User.findOne({
-            where: {nickname:nickname  }
+            where: { nickname: nickname }
         })
 
         if (checkNicknameExists) {
             throw new Error("Este nickname ya está en uso")
         }
-        
+
 
         const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
         if (!validEmail.test(email)) {
@@ -65,9 +65,10 @@ export const registerUser = async (req: Request, res: Response) => {
 
         const createdUser = await User.findOne({
             where:
-        {
-            nickname:nickname
-        }})
+            {
+                nickname: nickname
+            }
+        })
 
         res.status(201).json({
             success: true,
@@ -107,9 +108,9 @@ export const login = async (req: Request, res: Response) => {
         const password = req.body.password
 
         if (!email || !password) {
-            throw new Error ("Email y contraseña son obligatorios")
+            throw new Error("Email y contraseña son obligatorios")
         }
-            
+
 
         const validEmail = /^\w+([.-_+]?\w+)*@\w+([.-]?\w+)*(\.\w{2,10})+$/;
         if (!validEmail.test(email)) {
@@ -133,7 +134,7 @@ export const login = async (req: Request, res: Response) => {
 
         if (!user) {
             throw new Error("Email o contraseña incorrectos")
-            
+
         }
 
         const isValidPassword = bcrypt.compareSync(password, user.password)
@@ -166,7 +167,7 @@ export const login = async (req: Request, res: Response) => {
         if (error.message === "Email y contraseña son obligatorios") {
             return handleError(res, error.message, 400)
         }
-        
+
         if (error.message === "Formato de email incorrecto") {
             return handleError(res, error.message, 400)
         }

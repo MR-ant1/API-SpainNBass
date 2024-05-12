@@ -69,7 +69,7 @@ export const createComment = async (req: Request, res: Response) => {
             throw new Error("El enlace debe tener entre 3 y 250 caracteres")
         }
 
-        const findPost = await Post.findOne({where: {id:parseInt(postId)}})
+        const findPost = await Post.findOne({ where: { id: parseInt(postId) } })
 
         if (!findPost) {
             throw new Error("Este post no existe")
@@ -89,7 +89,7 @@ export const createComment = async (req: Request, res: Response) => {
                 comment: true,
                 url: true,
                 createdAt: true,
-                user: {id:true, nickname:true}
+                user: { id: true, nickname: true }
             }
         })
 

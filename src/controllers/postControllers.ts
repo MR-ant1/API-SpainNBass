@@ -124,15 +124,15 @@ export const createPost = async (req: Request, res: Response) => {
             description: description,
             picUrl: picUrl,
             topic: topic,
-            owner: { id: userId}
+            owner: { id: userId }
         }).save()
 
-    //     const createdPost = await Post.find({where: {
-    //         id: newPost.id
-    //     },
-    // relations:{
-    //     owner: true
-    // }})
+        //     const createdPost = await Post.find({where: {
+        //         id: newPost.id
+        //     },
+        // relations:{
+        //     owner: true
+        // }})
 
         res.status(201).json({
             success: true,

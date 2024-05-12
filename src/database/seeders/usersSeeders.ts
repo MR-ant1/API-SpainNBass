@@ -49,5 +49,5 @@ export const userSeedDataBase = async () => {
     } catch (error) {
         console.log(error)
     }
-    finally {await AppDataSource.destroy()}
+    finally { await AppDataSource.destroy() }
 }
