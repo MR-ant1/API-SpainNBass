@@ -19,7 +19,7 @@ export const latestSeedDataBase = async () => {
     try {
         await AppDataSource.initialize();
             
-            const fakeLatests = Array.from({ length: 5 }, generateFakeLatest);
+            const fakeLatests = Array.from({ length: 12 }, generateFakeLatest);
 
             await Latest.save(fakeLatests);
     

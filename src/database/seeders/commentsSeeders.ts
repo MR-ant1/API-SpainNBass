@@ -21,11 +21,8 @@ export const commentSeedDataBase = async () => {
     try {
         await AppDataSource.initialize();
             
-            const fakeComments = Array.from({ length: 4 }, generateFakeComment);
+            const fakeComments = Array.from({ length: 30 }, generateFakeComment);
             await Comment.save(fakeComments);
-            
-          
-    
     } catch (error) {
        console.log(error)
     }

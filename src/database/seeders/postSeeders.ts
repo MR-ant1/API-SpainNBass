@@ -81,7 +81,7 @@ export const postSeedDataBase = async () => {
 
         await postSeventhTopic.save()
             
-            const fakePosts = Array.from({ length: 4 }, generateFakePost);
+            const fakePosts = Array.from({ length: 20 }, generateFakePost);
             await Post.save(fakePosts);
     
     } catch (error) {
