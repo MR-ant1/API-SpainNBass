@@ -4,7 +4,7 @@
 ### OBJETIVO :dart:
 Este proyecto tiene como fin recrear el backend de una API con varias tablas de registros y relaciones de uno a muchos y de muchos a muchos entre ellas.
 
-![alt text](../Frontend/front_spainnbass/img/FotoReadme.jpg)
+![alt text](img/FotoReadme.jpg)
 
 ### INDICE :open_file_folder: 
 - [API SpainNBass Web](#api-spainnbass-web)
@@ -98,7 +98,7 @@ npm run migration
 Ésto enviará a nuestra base de datos el formato de nuestras tablas y sus relaciones
 - 8. Ejecutamos los seeders mediante el comando:
 ``` bash
-ts-node ./src/database/seeders/seeder.ts
+npm run seed
 ```
 Con este comando añadiremos la información con los registros a nuestro mysql
 - 9. Levantamos servidor mediante el comando "npm run dev"
@@ -134,6 +134,7 @@ Como se puede ver viene preparado para funcionar sin tener que cambiarle ningun 
 
 Desde aquí, se pasó a la elaboración de la función para levantar el servidor.
 ![alt text](img/ServerScreenshot.png)
+
 Aquí podemos ver como, importando la dependencia "dotenv", app-express y appDataSource mencionado arriba, ya pudimos definir la variable startServer, en la que inicializamos la base de datos. 
 Justo despues, la aplicación de express deja en "escucha" al servidor, por lo que ya puede empezar a procesar ordenes. Abajo ya fuera de función, invocamos startServer para poder iniciar base de datos y servidor unicamente ejecutando la ruta de este "server.ts" Se añade nodemon a este comando para arrancar, de tal manera que éste le permitirá reiniciarse cada vez que se realice un guardado.
 <details>
@@ -141,12 +142,13 @@ Justo despues, la aplicación de express deja en "escucha" al servidor, por lo q
 
 A continuación se ejemplifica uno de los cuatro archivos que contienen las migraciones:
 ![alt text](img/MigrationScreenshot.png)
+
 En el resto de casos, la estructura es exactamente similar a esta. Se exportó esta función que contiene el nombre de tabla y cada una de las columnas definidas para esta tabla servicios.
 Estos documentos serán los que tomará como referencia nuestro mysql para elaborar las tablas de datos. Aqui decidiremos el tipo de dato que cada columna contendrá, y algunas propiedades de ser necesario para estas columnas como el no poder estar vacía, o su tamaño entre otras.
 Además, indicaremos que columnas, si las hay, son foreign keys y van a tener relación con otras tablas.
 
 Después de establecer las migraciones, el siguiente paso es crear los modelos o entidades que conectan estas tablas con los controllers y endpoints que después definiremos.
-A continuación encontramos el modelo de usuarios que rige todas las interacciones que esta tendrá después con las demás tablas. Definimos el nombre de la tabla junto a entity, para posteriormente ir incluyendo las columnas id como primary key (la que enlazará con otras tablas) y las demas columnas secundarias. 
+A continuación encontramos el modelo de usuarios que rige todas las interacciones que ésta tendrá después con las demás tablas. Definimos el nombre de la tabla junto a entity, para posteriormente ir incluyendo las columnas id como primary key (la que enlazará con otras tablas) y las demas columnas secundarias. 
 
 ![alt text](img/UserModelScreenshot.png)
 
@@ -160,12 +162,14 @@ Sirven para controlar el acceso de usuarios a distintas funciones, se crearon do
 Las variables de ambos middlewares serán llamadas en las rutas de los distintos endpoints de ser necesarios para limitar o verificar al usuario que la solicite.
 
     AUTH
-![alt text](img/authScreenshot.png)    
+![alt text](img/authScreenshot.png)
+
   Se define la variable auth, que usará los parametros req y res, y además NextFunction, que regula el paso a la siguiente función.
   Despues ya dentro de función, definimos la variable token, que comprobará si la cifra introducida es correcta eliminando mediante split las comillas que incluimos. Después utiliza el token y comprueba mediante la dependencia jwt, si el susodicho concuerda junto a la palabra secreta almacenada en .env .Si es, así da paso a la ejecución de isSuperAdmin si está presente, o a la variable del endpoint para que se ejecute.
 
     IS_SUPER_ADMIN
 ![alt text](img/isSuperScreenshot.png)
+
 Comprueba si el rolename asociado al user_id del token, es super_admin y da acceso al endpoint limitado a dicho rol.
 </details>
 
@@ -186,8 +190,10 @@ Si importamos la colección que adjunto en la carpeta HTTP, deberían venir todo
 Tras esto, iremos a la pestaña "Body", en introduciremos en el cuadro inferior de texto las 4 columnas a crear del usuario con sus valores donde aparecen las "x" tal y como vienen escritas aqui respetando comillas:
 ``` bash
 {
-  "firstName": "xxxxx",
-  "lastName": "xxxxxxx",
+  "nickname": "xxxxx",
+  "favSubgenre": "Rollers",
+  "preference": "DJ"
+  "turntable": "fkdsjfidsf",
   "email": "xxxxxxxxx",
   "password": "xxxxxx"
 }
@@ -200,7 +206,8 @@ Tras esto, iremos a la pestaña "Body", en introduciremos en el cuadro inferior 
  Se hace una búsqueda de un solo usuario que tenga ese mismo email (no puede haber dos usuarios con un mismo email), y se obtienen sus datos mediante select. 
  
  Tras esto, se hace una comparación mediante bcrypt con la contraseña almacenada (este se encarga de desencriptarla) y por último, se lleva a cabo la creación de un token temporal para ese usuario con jwt, importado arriba del documento. Le indicamos aqui que contendrá tanto el user_id como el rol del usuario loggeado.Y en el archivo aparte "types>index",
- ```
+
+ ``` bash
 export interface TokenData {
     userId: number;
     roleName: string;
@@ -213,7 +220,7 @@ declare global {
             tokenData: TokenData;
         }
     }
-}
+
  ```
 damos formato a la función de token creada en el login.
 Este token será el que se use a partir de ahora para autentificar a cualquier usuario como perteneciente a la base de datos.
@@ -222,7 +229,7 @@ Para hacer funcionar esta endpoint, debemos de nuevo acudir al body de nuestro c
  client, y consultar algun correo de algún usuario randomizado, aunque se recomienda usar el el correo con derechos de super_admin junto a la contraseña indicada(todos los usuarios randomizados y admin, tienen la misma contraseña por defecto)
  ``` bash
  "email": "superadmin@superadmin.com",
- "password": "useruser"
+ "password": "aA123456"
 ```
 COPIAREMOS EL NUMERO DE TOKEN QUE LA CONSOLA DEL CLIENT DEVUELVA PARA, A PARTIR DE AHORA, UTILIZARLO EN NUESTRO CLIENT INTRODUCIENDOLO EN EL APARTADO AUTH>BEARER
 </details>
@@ -293,7 +300,7 @@ Mediante la identificación por token, el sistema mostrará todos los comentario
 ###  AUTOR :pencil2:
 - Antonio Rodrigo - Full Stack Developer student
 
-- <a href="https://github.com/MR-ant1">GitHub - <a>in/antonio-rodrigo-camacho</a>
+- <a href="https://github.com/MR-ant1">GitHub - <a href="https://www.linkedin.com/in/antonio-rodrigo-camacho/">Linkedin </a>
 
 ### POSIBLES MEJORAS :heavy_check_mark: 
 
