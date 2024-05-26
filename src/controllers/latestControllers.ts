@@ -5,13 +5,15 @@ import { Latest } from "../models/Latest";
 
 export const getLatests = async (req: Request, res: Response) => {
     try {
-        const latests = await Latest.find({relations:{user:true},
-        select:{user: {nickname:true}}})
+        const latests = await Latest.find({
+            relations: { user: true },
+            select: { user: { nickname: true } }
+        })
 
         if (!latests) {
             throw new Error('No se encontraron noticias')
         }
-           
+
         const sortedLatests = latests.sort((a, b) => b.createdAt.getTime() - a.createdAt.getTime())
 
         res.status(200).json(
@@ -29,13 +31,13 @@ export const getLatests = async (req: Request, res: Response) => {
     }
 }
 
-export const createLatest =  async (req: Request, res: Response) => {
+export const createLatest = async (req: Request, res: Response) => {
     try {
         const title = req.body.title
         const description = req.body.description
         const picUrl = req.body.picUrl
 
-        if ( !title || !description) {
+        if (!title || !description) {
             throw new Error("Título y descripción son obligatorios")
         }
 
@@ -81,51 +83,51 @@ export const updateLatest = async (req: Request, res: Response) => {
         const description = req.body.description
         const picUrl = req.body.picUrl
         const latestId = req.params.id
-        
+
         const latestUpdated: Object = await Latest.update(
             { id: parseInt(latestId) },
             {
-            title: title,
-            description: description,
-            picUrl: picUrl
+                title: title,
+                description: description,
+                picUrl: picUrl
             }
         )
 
         res.status(200).json(
-        {
-            success: true,
-            message: "Perfil actualizado correctamente",
-            data:{title, description}
+            {
+                success: true,
+                message: "Perfil actualizado correctamente",
+                data: { title, description }
+            }
+        )
+    } catch (error: any) {
+        if (error.message === "No se puede actualizar el post de otro usuario") {
+            return handleError(res, error.message, 404)
         }
-    )
-} catch (error:any) {
-    if (error.message === "No se puede actualizar el post de otro usuario") {
-        return handleError(res, error.message, 404)
+        if (error.message === "Formato de email incorrecto") {
+            return handleError(res, error.message, 404)
+        }
+        handleError(res, "No se pudo actualizar noticia", 500); console.log(error)
     }
-    if (error.message === "Formato de email incorrecto") {
-        return handleError(res, error.message, 404)
-    }
-    handleError(res, "No se pudo actualizar noticia", 500); console.log(error)
-}
 }
 
 export const deleteLatest = async (req: Request, res: Response) => {
     try {
         const latestId = req.params.id;
-        
-        const latestDeleted: any = await Latest.findOne({where: {id:parseInt(latestId)}})
-        
+
+        const latestDeleted: any = await Latest.findOne({ where: { id: parseInt(latestId) } })
+
         await Latest.remove(latestDeleted)
-           
+
         res.status(200).json(
             {
                 success: true,
                 message: "Se ha borrado la noticia correctamente"
             }
         )
-        
+
     } catch (error: any) {
         handleError(res, "No se pudo eliminar tu post", 500)
     }
-    
+
 }

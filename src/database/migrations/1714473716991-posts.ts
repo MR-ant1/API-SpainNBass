@@ -65,7 +65,7 @@ export class Posts1714473716991 implements MigrationInterface {
             }),
             true
         )
-    
+
     }
 
     public async down(queryRunner: QueryRunner): Promise<void> {

@@ -19,7 +19,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
             return res.status(404).json({
                 success: false,
                 message: "No existen usuarios",
-                data:[]
+                data: []
             })
         }
         res.status(200).json(
@@ -74,9 +74,9 @@ export const updateProfile = async (req: Request, res: Response) => {
             throw new Error("El campo Equipo y RRSS tiene que tener mas de 2 caracteres")
         }
 
-        const findNickname = await User.find({where: {nickname: nickname}})
+        const findNickname = await User.find({ where: { nickname: nickname } })
 
-        if(findNickname.length > 0) {
+        if (findNickname.length > 0) {
             throw new Error("Este nickname ya está en uso")
         }
 
@@ -154,12 +154,13 @@ export const deleteUser = async (req: Request, res: Response) => {
     try {
         const userDeletedId = req.params.id
 
-        const userDeleted: any = await User.findOne({ where: { id: parseInt(userDeletedId) },
-        select:{
-            id:true,
-            role:true
-        }
-    })
+        const userDeleted: any = await User.findOne({
+            where: { id: parseInt(userDeletedId) },
+            select: {
+                id: true,
+                role: true
+            }
+        })
 
         if (userDeleted.length === 0) {
             throw new Error("Este usuario no existe")
@@ -175,7 +176,7 @@ export const deleteUser = async (req: Request, res: Response) => {
             {
                 success: true,
                 message: "Este usuario ha sido borrado correctamente",
-                data:userDeleted
+                data: userDeleted
             }
         )
 

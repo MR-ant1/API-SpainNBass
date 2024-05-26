@@ -1,7 +1,7 @@
 
-import {faker} from "@faker-js/faker"
+import { faker } from "@faker-js/faker"
 import { AppDataSource } from "../db"
-import { Comment } from "../../models/Comment" 
+import { Comment } from "../../models/Comment"
 import { User } from "../../models/User";
 import { Post } from "../../models/Post";
 
@@ -11,23 +11,20 @@ const generateFakeComment = () => {
     randomComment.comment = faker.lorem.words();
     randomComment.url = faker.internet.url();
     randomComment.user = new User();
-    randomComment.user.id = faker.number.int({min:1, max:10});
+    randomComment.user.id = faker.number.int({ min: 1, max: 10 });
     randomComment.post = new Post();
-    randomComment.post.id = faker.number.int({min:1, max:4});
+    randomComment.post.id = faker.number.int({ min: 1, max: 4 });
     return randomComment;
 }
 
 export const commentSeedDataBase = async () => {
     try {
         await AppDataSource.initialize();
-            
-            const fakeComments = Array.from({ length: 4 }, generateFakeComment);
-            await Comment.save(fakeComments);
-            
-          
-    
+
+        const fakeComments = Array.from({ length: 30 }, generateFakeComment);
+        await Comment.save(fakeComments);
     } catch (error) {
-       console.log(error)
+        console.log(error)
     }
-    finally  {await AppDataSource.destroy()}
+    finally { await AppDataSource.destroy() }
 }

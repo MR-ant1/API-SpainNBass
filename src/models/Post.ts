@@ -1,6 +1,6 @@
 
 
-import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne,  OneToMany,  PrimaryGeneratedColumn } from "typeorm"
+import { BaseEntity, Column, Entity, JoinColumn, JoinTable, ManyToMany, ManyToOne, OneToMany, PrimaryGeneratedColumn } from "typeorm"
 import { User } from "./User"
 import { Comment } from "./Comment"
 import { Like } from "./Like"
@@ -19,7 +19,7 @@ export class Post extends BaseEntity {
 
     @Column({ name: "topic" })
     topic!: string
-    
+
     @Column({ name: "pic_url" })
     picUrl!: string
 

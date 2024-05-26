@@ -23,12 +23,12 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
                     user: { id: userId },
                     post: { id: parseInt(postId) }
                 },
-                relations:{
-                    user:true,
-                    post:true
+                relations: {
+                    user: true,
+                    post: true
                 },
                 select: {
-                    user: {nickname:true, favSubgenre:true}
+                    user: { nickname: true, favSubgenre: true }
                 }
             })
         if (LikeOrDislike.length === 0) {
@@ -43,12 +43,12 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
                     user: { id: userId },
                     post: { id: parseInt(postId) }
                 },
-                relations:{
-                    post:true,
-                    user:true
+                relations: {
+                    post: true,
+                    user: true
                 },
                 select: {
-                    user: {nickname:true, favSubgenre:true}
+                    user: { nickname: true, favSubgenre: true }
                 }
             })
 
@@ -56,23 +56,23 @@ export const sendOrRemoveLike = async (req: Request, res: Response) => {
                 {
                     success: true,
                     message: 'Like',
-                    data:liked
+                    data: liked
                 }
             )
 
-        }else {
+        } else {
             await Like.remove(LikeOrDislike)
 
             res.status(201).json(
                 {
                     success: true,
                     message: "Disliked",
-                    data:LikeOrDislike
+                    data: LikeOrDislike
                 }
             )
         }
 
-        
+
     } catch (error: any) {
         if (error.message === "Este post no existe") {
             return handleError(res, error.message, 404)
@@ -89,13 +89,13 @@ export const getUserLikes = async (req: Request, res: Response) => {
             where: { user: { id: userId } },
             relations: {
                 post: true,
-                user:true
+                user: true
             },
             select: {
-                post:{id:true, title:true, description:true}
+                post: { id: true, title: true, description: true }
             }
         })
-      
+
         if (myComments.length > 0) {
             res.status(200).json(
                 {
@@ -128,8 +128,8 @@ export const getPostLikes = async (req: Request, res: Response) => {
                 post: true
             },
             select: {
-                user: {id:true,nickname:true},
-                post: {id:true}
+                user: { id: true, nickname: true },
+                post: { id: true }
             }
         })
         if (myPosts.length === 0) {
