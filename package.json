@@ -9,7 +9,7 @@
     "migration": "typeorm-ts-node-commonjs migration:run -d ./src/database/db.ts",
     "migration-revert": "typeorm-ts-node-commonjs migration:revert -d ./src/database/db.ts",
     "seed": "ts-node ./src/database/seeders/seeder.ts",
-    "build": "tsc",
+    "build": "[my-framework] build --output public",
     "start": "node ./dist/server.js"
   },
   "keywords": [],
