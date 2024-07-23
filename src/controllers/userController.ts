@@ -36,7 +36,7 @@ export const getAllUsers = async (req: Request, res: Response) => {
         if (error.message === "No existen usuarios") {
             return handleError(res, error.message, 404)
         }
-        handleError(res, "Cant update users", 500)
+        handleError(res, "Cant get users", 500)
     }
 }
 
@@ -56,7 +56,7 @@ export const getMyProfile = async (req: Request, res: Response) => {
             }
         )
     } catch (error) {
-        handleError(res, "Cant update users", 500)
+        handleError(res, "Cant get profile", 500)
     }
 }
 

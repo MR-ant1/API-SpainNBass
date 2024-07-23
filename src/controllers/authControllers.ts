@@ -97,7 +97,7 @@ export const registerUser = async (req: Request, res: Response) => {
         if (error.message === "Formato de email incorrecto") {
             return handleError(res, error.message, 404)
         }
-        handleError(res, "Cant update users", 500)
+        handleError(res, "Cant register user", 500)
     }
 }
 
@@ -174,6 +174,6 @@ export const login = async (req: Request, res: Response) => {
         if (error.message === "Email o contraseña incorrectos") {
             return handleError(res, error.message, 400)
         }
-        handleError(res, "Cant update users", 500)
+        handleError(res, "Cant login user", 500)
     }
 }
